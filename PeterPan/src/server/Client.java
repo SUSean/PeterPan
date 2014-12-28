@@ -1,0 +1,161 @@
+package server;
+
+import game.GameLogIn;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+public class Client {
+	private String destinationIPAddr;
+	private int destinationPortNum;
+	private Socket socket;
+	private PrintWriter writer;
+	private ClientThread connection;
+	private GameLogIn login;
+	private int coin;
+	private int highScore;
+	public boolean[] haveCharacterFlag=new boolean[10];
+	public void connect() {
+		try {
+			this.socket = new Socket(this.destinationIPAddr,this.destinationPortNum);
+			this.writer=new PrintWriter(new OutputStreamWriter(this.socket.getOutputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+			this.connection = new ClientThread(reader);
+			this.connection.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private class ClientThread extends Thread{
+		private BufferedReader reader;
+		public ClientThread(BufferedReader reader){
+			this.reader=reader;
+		}
+		public void run (){
+			while(!socket.isClosed()){
+				String line;
+				try {
+					if((line = reader.readLine()) != null){
+						JSONObject message = new JSONObject(line);
+						String type = message.getString("Type");
+						if(type.equals("LogIn")){
+							receiveLogIn();
+						}
+						else if(type.equals("Correct")){
+							receiveCorrect(message.getString("Coin"),
+											message.getString("HighScore"),
+											message.getJSONArray("Characters"));
+						}
+						else if(type.equals("Worng")){
+							receiveWorng((String) message.get("Value"));
+						}
+					}
+					else 
+						break;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void sendUser(String userName, String password) throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "User");
+		message.put("UserName", userName);
+		message.put("Password", password);
+		String messageString = message.toString();
+		sendMessage(messageString);
+	}
+	public void sendRegister(String userName, String password) throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "Register");
+		message.put("UserName", userName);
+		message.put("Password", password);
+		String messageString = message.toString();
+		sendMessage(messageString);
+		
+	}
+	public void sendNewScore(int score) throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "Score");
+		message.put("Score", score);
+		String messageString = message.toString();
+		sendMessage(messageString);
+	}
+	public void sendNewCoin(int coin) throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "Coin");
+		message.put("Coin", coin);
+		String messageString = message.toString();
+		sendMessage(messageString);
+	}
+	public void sendMessage(String message){
+		this.writer.println(message);
+		this.writer.flush();
+	}
+	
+	public void receiveLogIn() {
+		login = new GameLogIn(this);
+	}
+	public void receiveCorrect(String coin, String highScore, JSONArray characters) {
+		login.gameStart();
+		setCoin(Integer.parseInt(coin));
+		sethighScore(Integer.parseInt(highScore));
+		for(int i=0;i<10;i++){
+			try {
+				setCharacter(i,characters.getBoolean(i));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+			
+	}
+
+	public void receiveWorng(String error) {
+		if(error.equals("1")){
+			login.error("user name or password uncorrect");
+		}
+		else if(error.equals("2")){
+			login.error("user name exist");
+		}
+	}
+	public void setCoin(int coin) {
+		this.coin=coin;
+	}
+	public void sethighScore(int highScore) {
+		this.highScore=highScore;
+	}
+	public void setCharacter(int i, boolean flag) {
+		this.haveCharacterFlag[i]=flag;
+	}
+	public Client setIPAddress(String IPAddress) {
+		this.destinationIPAddr = IPAddress;
+		return this;
+	}
+	
+	public Client setPort(int portNum) {
+		this.destinationPortNum = portNum;
+		return this;
+	}
+	public static void main(String[] args) {
+		Client client = new Client();
+		client.setIPAddress("127.0.0.1").setPort(8000).connect();
+	}
+}
