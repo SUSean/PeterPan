@@ -21,9 +21,11 @@ public class Client {
 	private PrintWriter writer;
 	private ClientThread connection;
 	private GameLogIn login;
+	private String name;
 	private int coin;
 	private int highScore;
 	public boolean[] haveCharacterFlag=new boolean[10];
+	public String[] topTen=new String[10];
 	public void connect() {
 		try {
 			this.socket = new Socket(this.destinationIPAddr,this.destinationPortNum);
@@ -52,12 +54,17 @@ public class Client {
 							receiveLogIn();
 						}
 						else if(type.equals("Correct")){
-							receiveCorrect(message.getString("Coin"),
+							receiveCorrect(message.getString("Name"),
+											message.getString("Coin"),
 											message.getString("HighScore"),
-											message.getJSONArray("Characters"));
+											message.getJSONArray("Characters")
+											);
 						}
 						else if(type.equals("Worng")){
-							receiveWorng((String) message.get("Value"));
+							receiveWorng(message.getString("Value"));
+						}
+						else if(type.equals("Top Ten")){
+							receiveTopTen(message.getJSONArray("Rank"));
 						}
 					}
 					else 
@@ -104,6 +111,12 @@ public class Client {
 		String messageString = message.toString();
 		sendMessage(messageString);
 	}
+	public void sendOver() throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "Over");
+		String messageString = message.toString();
+		sendMessage(messageString);
+	}
 	public void sendMessage(String message){
 		this.writer.println(message);
 		this.writer.flush();
@@ -112,10 +125,11 @@ public class Client {
 	public void receiveLogIn() {
 		login = new GameLogIn(this);
 	}
-	public void receiveCorrect(String coin, String highScore, JSONArray characters) {
+	public void receiveCorrect(String name,String coin, String highScore, JSONArray characters) {
 		login.gameStart();
 		setCoin(Integer.parseInt(coin));
 		sethighScore(Integer.parseInt(highScore));
+		this.name=name;
 		for(int i=0;i<10;i++){
 			try {
 				setCharacter(i,characters.getBoolean(i));
@@ -123,17 +137,24 @@ public class Client {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
-			
 	}
-
 	public void receiveWorng(String error) {
 		if(error.equals("1")){
 			login.error("user name or password uncorrect");
 		}
 		else if(error.equals("2")){
 			login.error("user name exist");
+		}
+	}
+	public void receiveTopTen(JSONArray topTen) {
+		for(int i=0;i<10;i++){
+			try {
+				this.topTen[i]=topTen.getString(i);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	public void setCoin(int coin) {
@@ -158,4 +179,5 @@ public class Client {
 		Client client = new Client();
 		client.setIPAddress("127.0.0.1").setPort(8000).connect();
 	}
+
 }

@@ -192,7 +192,7 @@ public class ChooseCharacter extends PApplet{
 
 		//draw characters
 		//if the character is bought then show the image
-		if (boughtCharacter[1] == true){
+		/*if (boughtCharacter[1] == true){
 			tint(120);
 			
 			//see if the character is now selected and then set as the brightest
@@ -295,11 +295,11 @@ public class ChooseCharacter extends PApplet{
 			tint(120);
 			
 			//see if the character is now selected and then set as the brightest
-			if (nowWhichCharacterChosed == 10)
-				tint(255);
+		if (nowWhichCharacterChosed == 10)
+			tint(255);
 			image(characters[10], width/13*9, height/15*5-20, 100, 150);
-		}
-		/******for(int i=1;i<11;i++){
+		}*/
+		for(int i=1;i<11;i++){
 			if (boughtCharacter[i] == true){
 				tint(120);
 				
@@ -309,7 +309,7 @@ public class ChooseCharacter extends PApplet{
 				image(characters[i], width/13*(1+((i-1)/4)*4), height/15+150*((i%4+3)%4), 100, 150);
 			}
 			tint(0);
-		}*******/
+		}
 		
 		//show the "go_back_sign" image
 		if (nowWhichCharacterChosed == 11){

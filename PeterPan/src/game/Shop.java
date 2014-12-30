@@ -228,7 +228,7 @@ public class Shop extends PApplet{
 		}
 		//draw characters
 		//see if the character is bought and then give different brightness
-		if (boughtCharacter[1] == true)
+		/*if (boughtCharacter[1] == true)
 			tint(120);
 		else tint(0);
 		
@@ -334,10 +334,10 @@ public class Shop extends PApplet{
 		//see if the character is now selected and then set as the brightest
 		if (nowWhichCharacterChosed == 10)
 			tint(255);
-		image(characters[10], width/13*9, height/15*5-20, 100, 150);		
+		image(characters[10], width/13*9, height/15*5-20, 100, 150);
+		else tint(0);*/	
 		
-		
-		/******for(int i=1;i<11;i++){
+		for(int i=1;i<11;i++){
 			if (boughtCharacter[i] == true)
 				tint(120);
 			else 
@@ -346,7 +346,7 @@ public class Shop extends PApplet{
 				tint(255);
 			image(characters[i], width/13*(1+((i-1)/4)*4), height/15+150*((i%4+3)%4), 100, 150);
 			tint(0);
-		}******/
+		}
 		
 		if (nowWhichCharacterChosed == 11){
 			tint(255);

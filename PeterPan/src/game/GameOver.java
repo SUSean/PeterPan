@@ -2,14 +2,16 @@ package game;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import server.Client;
 
 public class GameOver extends PApplet{
 	PImage background;
 	PImage textGameOver;
 	String[] topTenName;
 	int[] topTenScore;
-	
-	public GameOver(){
+	private Client client;
+	public GameOver(Client client){
+		this.client=client;
 		//load background
 		background = new PImage();
 		this.background = loadImage(this.getClass().getResource("/res/Background/background_1.jpg").getPath());
@@ -19,16 +21,13 @@ public class GameOver extends PApplet{
 		this.textGameOver = loadImage(this.getClass().getResource("/res/Shop/textGameOver.png").getPath());
 		
 		//set topTenName 
-		topTenName = new String[11];
-		//unfinished
-		topTenName[1] = "Peter";
-		topTenName[2] = "Pan";
-		
+		topTenName = new String[11];	
+		for(int i=1;i<11;i++){
+			topTenName[i]=this.client.topTen[i-1];
+		}
 		//set topTenScore
-		topTenScore = new int[11];
-		//unfinished
-		topTenScore[1] = 100;
-		topTenScore[2] = 95;
+		//topTenScore = new int[11];
+
 	}
 	public void setup(){
 		size(500, 700);
@@ -41,7 +40,7 @@ public class GameOver extends PApplet{
 		
 		//list top ten score
 		for (int i=1; i < 11; i++){
-			text("Rank" + i + ":" + topTenName[i] + "  Score: " + topTenScore[i], 20, 160 + 45*(i-1));
+			text(topTenName[i], 20, 160 + 45*(i-1));
 			textSize(35);
 		}
 	}

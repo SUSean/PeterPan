@@ -78,6 +78,9 @@ public class Server {
 						else if(type.equals("Register")){
 							receiveRegister(this,message.getString("UserName"),message.getString("Password"));
 						}
+						else if(type.equals("Over")){
+							sendTopTen(this,data.getTopTen());
+						}
 					}
 					else 
 						break;
@@ -86,6 +89,9 @@ public class Server {
 					try {
 						this.socket.close();
 						data.dataWrite();
+						System.out.println("client"
+								+ socket.getInetAddress() + ":"
+								+ socket.getPort() + "close");
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -115,6 +121,7 @@ public class Server {
 	private void sendCorrect(ConnectionThread connThread,String name) throws JSONException {
 		JSONObject message = new JSONObject();
 		message.put("Type", "Correct");
+		message.put("Name", name);
 		message.put("Coin", data.users.get(name).coin);
 		message.put("HighScore", data.users.get(name).score);
 		message.put("Characters", data.users.get(name).haveCharacter);
@@ -132,6 +139,14 @@ public class Server {
 		}
 		String messageString = message.toString();
 		sendMessageTo(connThread,messageString);
+	}
+	public void sendTopTen(ConnectionThread connThread,String[] topTen) throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "Top Ten");
+		message.put("Rank", topTen);
+		String messageString = message.toString();
+		sendMessageTo(connThread,messageString);
+		
 	}
 	public void receiveUser(ConnectionThread connThread,String userName, String password) throws JSONException {
 		for(String name : data.users.keySet()){

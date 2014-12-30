@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
+import org.json.JSONException;
+
 import model.Model;
 import processing.core.PImage;
 import server.Client;
@@ -22,8 +24,7 @@ public class Game extends JFrame{
 	private GameStart gameStart;
 	private ChooseCharacter chooseCharacter;
 	private Shop shop;
-	private EndPanel endPanel;
-	private WinPanel winPanel;
+	private GameOver endPanel;
 
 	/**
 	 * Constructor of a game 
@@ -116,12 +117,15 @@ public class Game extends JFrame{
 	}
 	/**
 	 * A method invoked when plane crashed
+	 * @throws JSONException 
 	 */
-	public void gameOver() {
+	public void gameOver() throws JSONException {
 		this.remove(this.gameScene);
 		this.gameScene.destroy();
-		
-		this.endPanel=new EndPanel();
+		this.client.sendNewCoin(0);
+		this.client.sendNewScore(0);
+		this.client.sendOver();
+		this.endPanel=new GameOver(this.client);
 		endPanel.init();
 		endPanel.start();
 		this.add(endPanel);
@@ -131,13 +135,5 @@ public class Game extends JFrame{
 	/**
 	 * A method invoked when the plane successfully fly pass 20 rocks
 	 */
-	public void win() {
-		this.remove(this.gameScene);
-		this.gameScene.destroy();
-		this.winPanel = new WinPanel();
-		this.winPanel.init();
-		this.winPanel.start();
-		this.add(this.winPanel);
-		this.setVisible(true);
-	}
+	
 }

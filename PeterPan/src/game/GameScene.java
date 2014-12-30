@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.json.JSONException;
+
 import model.Model;
 import model.Music;
 import processing.core.PApplet;
@@ -82,7 +84,12 @@ public class GameScene extends PApplet{
 			time=0;
 			//���ƨS�F�� !!
 			if(score<(level*level)*2){
-				parentFrame.gameOver();
+				try {
+					parentFrame.gameOver();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else {
 				isDisplayTunnel=true;
@@ -128,7 +135,12 @@ public class GameScene extends PApplet{
 		isHitTunnel();
 		
 		if(level==10){
-			parentFrame.gameOver();
+			try {
+				parentFrame.gameOver();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
