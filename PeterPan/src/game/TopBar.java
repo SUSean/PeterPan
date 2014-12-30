@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -24,6 +25,7 @@ public class TopBar extends JPanel implements TopBarDelegate{
 	//private int money;
 	private String level;
 	private String money;
+	private BufferedImage image;
 	
 	public TopBar(Rectangle bounds){
 		this.setLayout(new FlowLayout(FlowLayout.LEADING));
