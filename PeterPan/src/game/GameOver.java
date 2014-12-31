@@ -9,8 +9,8 @@ public class GameOver extends PApplet{
 	String[] topTenName;
 	int[] topTenScore;
 	private Client client;
-	public GameOver(/*Client client*/){
-//		this.client=client;
+	public GameOver(Client client){
+		this.client=client;
 		//load background
 		background = new PImage();
 		this.background = loadImage(this.getClass().getResource("/res/Background/background_1.jpg").getPath());
@@ -47,21 +47,18 @@ public class GameOver extends PApplet{
 		
 		//list top ten score
 		for (int i=1; i < 11; i++){
-			text(/*topTenName[i]*/"Test", 20, 160 + 45*(i-1));
+			text(topTenName[i], 20, 160 + 45*(i-1));
 			textSize(35);
 		}
 		
 		//draw playAgain & exit icon
 		if (keyPressed && keyCode == ENTER){
-			System.out.println("PRESS ENTER");
 			
 		}
 		else if (keyPressed && keyCode == LEFT){
-			System.out.println("PRESS LEFT");
 			
 		}
 		else if (keyPressed && keyCode == RIGHT){
-			System.out.println("PRESS RIGHT");
 			
 		}
 	}
