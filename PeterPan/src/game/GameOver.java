@@ -10,6 +10,7 @@ public class GameOver extends PApplet{
 	int[] topTenScore;
 	private Client client;
 	private boolean rightButton;
+	private int isTopTenPlayer;
 
 	public GameOver(Client client){
 		this.client=client;
@@ -45,10 +46,17 @@ public class GameOver extends PApplet{
 		image(this.background, 0, 0);
 		image(this.textGameOver, 40, 20);
 		
+		
+		isTopTenPlayer = 1;
+		
 		//list top ten score
 		for (int i=1; i < 11; i++){
+			if (i == isTopTenPlayer)
+				fill(255, 255, 0);
+			else fill(255, 255, 255);
 			text(topTenName[i], 20, 160 + 45*(i-1));
 			textSize(35);
+			noFill();
 		}
 		
 		if (keyPressed && keyCode == ENTER){
