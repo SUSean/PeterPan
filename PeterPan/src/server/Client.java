@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,9 +22,9 @@ public class Client {
 	private PrintWriter writer;
 	private ClientThread connection;
 	private GameLogIn login;
-	private String name;
-	private int coin;
-	private int highScore;
+	public String name;
+	public int coin;
+	public int highScore;
 	public boolean[] haveCharacterFlag=new boolean[10];
 	public String[] topTen=new String[10];
 	public void connect() {
@@ -69,7 +70,17 @@ public class Client {
 					}
 					else 
 						break;
-				} catch (IOException e) {
+				} catch (SocketException e) {
+					try {
+						socket.close();
+						System.out.println("server"
+								+ socket.getInetAddress() + ":"
+								+ socket.getPort() + "close");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (JSONException e) {
@@ -126,7 +137,6 @@ public class Client {
 		login = new GameLogIn(this);
 	}
 	public void receiveCorrect(String name,String coin, String highScore, JSONArray characters) {
-		login.gameStart();
 		setCoin(Integer.parseInt(coin));
 		sethighScore(Integer.parseInt(highScore));
 		this.name=name;
@@ -138,6 +148,7 @@ public class Client {
 				e.printStackTrace();
 			}
 		}
+		login.gameStart();
 	}
 	public void receiveWorng(String error) {
 		if(error.equals("1")){

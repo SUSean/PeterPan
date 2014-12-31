@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 
 import processing.core.PApplet;
 import processing.core.PImage;
+import server.Client;
 
 public class GameStart extends PApplet{
 	PImage background, moneyIcon;
@@ -13,9 +14,9 @@ public class GameStart extends PApplet{
 	PImage buy;
 	private Game game;
 	private boolean isBuy;
-	private String money = "100";
-	
-	public GameStart(Game game){
+	private int money ;
+	private Client client;
+	public GameStart(Game game, Client client){
 		//load moneyIcon
 		moneyIcon = new PImage();
 		this.moneyIcon = loadImage(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
@@ -23,6 +24,8 @@ public class GameStart extends PApplet{
 		background = new PImage();
 		this.background = loadImage(this.getClass().getResource("/res/Background/background_4.jpg").getPath());
 		this.game=game;
+		this.client=client;
+		this.money=this.client.coin;
 	}
 	public void setup(){
 		size(500, 700);

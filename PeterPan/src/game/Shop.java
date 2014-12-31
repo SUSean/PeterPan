@@ -19,12 +19,13 @@ public class Shop extends PApplet{
 	private boolean isAllCharacterBought = true;
 	private Client client;
 	private PImage moneyIcon;
-	private String money = "100";
+	private int money;
 	
 	
 	public Shop(Game game,Client client, Model model){
 		this.game=game;
 		this.client=client;
+		this.money=this.client.coin;
 		//load moneyIcon
 		moneyIcon = new PImage();
 		this.moneyIcon = loadImage(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
@@ -130,6 +131,8 @@ public class Shop extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				if(temp==4)
+					temp=11;
+				else if(temp==11)
 					temp=8;
 				else
 					temp=(temp+8)%12;
@@ -145,6 +148,8 @@ public class Shop extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				if(temp==8)
+					temp=11;
+				else if(temp==11)
 					temp=4;
 				else
 					temp=(temp+4)%12;

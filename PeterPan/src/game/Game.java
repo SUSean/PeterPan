@@ -45,7 +45,8 @@ public class Game extends JFrame{
 		this.setVisible(true);
 	}
 	public void initGameStart(){
-		this.gameStart=new GameStart(this);
+		this.gameStart=new GameStart(this,this.client);
+		System.out.println(this.client.coin);
 		this.gameStart.init();
 		this.gameStart.start();
 		
@@ -56,7 +57,6 @@ public class Game extends JFrame{
 		this.chooseCharacter=new ChooseCharacter(this,this.client,model);
 		this.chooseCharacter.init();
 		this.chooseCharacter.start();
-		
 		this.remove(gameStart);
 		this.gameStart.stop();
 		this.add(chooseCharacter);

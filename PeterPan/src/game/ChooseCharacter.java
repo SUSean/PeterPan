@@ -15,8 +15,8 @@ public class ChooseCharacter extends PApplet{
 	private int characterNum;
 	private Game game;
 	private Client client;
-	private String userName = "SUSean";
-	private String money = "100";
+	private String userName;
+	private int money ;
 	
 	public ChooseCharacter(Game game,Client client, Model model){
 		//load background
@@ -25,6 +25,8 @@ public class ChooseCharacter extends PApplet{
 		this.background = loadImage(this.getClass().getResource("/res/Shop/grass.jpg").getPath());
 		
 		this.game=game;
+		this.money=this.client.coin;
+		this.userName=this.client.name;
 		//load characters' image & go_back_sign image
 		this.characterNum=model.getCharatorNum();
 		characters = new PImage[characterNum+2];
@@ -85,6 +87,8 @@ public class ChooseCharacter extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				if(temp==4)
+					temp=11;
+				else if(temp==11)
 					temp=8;
 				else
 					temp=(temp+8)%12;
@@ -98,6 +102,8 @@ public class ChooseCharacter extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				if(temp==8)
+					temp=11;
+				else if(temp==11)
 					temp=4;
 				else
 					temp=(temp+4)%12;
