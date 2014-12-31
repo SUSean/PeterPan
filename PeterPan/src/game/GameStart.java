@@ -8,13 +8,17 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 public class GameStart extends PApplet{
-	PImage background;
+	PImage background, moneyIcon;
 	PImage play;
 	PImage buy;
 	private Game game;
 	private boolean isBuy;
+	private String money = "100";
 	
 	public GameStart(Game game){
+		//load moneyIcon
+		moneyIcon = new PImage();
+		this.moneyIcon = loadImage(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
 		//load background image
 		background = new PImage();
 		this.background = loadImage(this.getClass().getResource("/res/Background/background_4.jpg").getPath());
@@ -27,6 +31,7 @@ public class GameStart extends PApplet{
 	public void draw(){
 		background(255, 255, 255);
 		image(this.background, 0, 0, this.background.width, this.background.height);
+		image(this.moneyIcon, 60, 20, 70, 70);
 		
 		if (keyPressed && keyCode == UP){//if press UP, then go to "Game Start" choice mode
 			isBuy = false;
@@ -35,10 +40,11 @@ public class GameStart extends PApplet{
 			isBuy = true;
 		}
 		
-		//set text "~Peter Pan~"
+		//set username text and money text
 		fill(0, 255, 0);
-		textSize(60);
-		text("~Peter Pan~", 80, 80);
+		textSize(50);
+		textAlign(LEFT);
+		text("Money:"+money, 150, 80);
 		noFill();
 		
 		if (isBuy == false){
