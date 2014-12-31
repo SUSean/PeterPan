@@ -7,11 +7,10 @@ import processing.core.PImage;
 import server.Client;
 
 public class Shop extends PApplet{
-	PImage[] shopKeepers;
-	PImage[] characters;
-	PImage background;
-	PImage mayIHelpYou;
-	PFont font;
+	private PImage[] shopKeepers;
+	private PImage[] characters;
+	private PImage background;
+	private PImage mayIHelpYou;
 	private Game game;
 	private int changeShopKeeper;
 	private int characterNum;
@@ -19,11 +18,16 @@ public class Shop extends PApplet{
 	private boolean[] boughtCharacter;
 	private boolean isAllCharacterBought = true;
 	private Client client;
+	private PImage moneyIcon;
+	private String money = "100";
 	
 	
 	public Shop(Game game,Client client, Model model){
 		this.game=game;
 		this.client=client;
+		//load moneyIcon
+		moneyIcon = new PImage();
+		this.moneyIcon = loadImage(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
 		//load shopKeepers' images
 		shopKeepers = new PImage[3];
 		this.shopKeepers[1] = loadImage(this.getClass().getResource("/res/Shop/shopkeeper_1.png").getPath());
@@ -96,78 +100,6 @@ public class Shop extends PApplet{
 		if(wantToGoBack()&&keyPressed&&key==ENTER){
 			game.shopGotoGameStart();
 		}
-		/*else if (keyPressed && keyCode == UP){
-			if (nowWhichCharacterChosed > 0 && nowWhichCharacterChosed < 12){
-				nowWhichCharacterChosed--;
-				
-			//prevent less than zero situation
-			if (nowWhichCharacterChosed <= 0)
-				nowWhichCharacterChosed++;
-
-			//if the character was bought, then change to the previous character
-			while (boughtCharacter[nowWhichCharacterChosed] == true){
-				nowWhichCharacterChosed--;
-			}
-
-			//prevent less than 1 situation
-			if (nowWhichCharacterChosed < 1)
-				nowWhichCharacterChosed++;
-			}
-		}
-		else if (keyPressed && keyCode == DOWN){
-			if (nowWhichCharacterChosed > 0 && nowWhichCharacterChosed < 12){
-				nowWhichCharacterChosed++;
-				
-			//prevent more than 10 situation
-			if (nowWhichCharacterChosed > 11)
-				nowWhichCharacterChosed--;
-
-			//if the character was bought, then change to the previous character
-			while (boughtCharacter[nowWhichCharacterChosed] == true){
-				nowWhichCharacterChosed++;
-			}
-
-			//special prevent more than 10 situation, include testing if is bought character
-			while (nowWhichCharacterChosed > 11 || boughtCharacter[nowWhichCharacterChosed] == true)
-				nowWhichCharacterChosed--;
-			}
-		}
-		else if (keyPressed && keyCode == LEFT){
-			if (nowWhichCharacterChosed > 0 && nowWhichCharacterChosed < 12){
-				nowWhichCharacterChosed-=4;
-
-			//prevent less than zero situation
-			if (nowWhichCharacterChosed <= 0)
-				nowWhichCharacterChosed+=4;
-			
-			//if the character was bought, then change to the previous character
-			while (boughtCharacter[nowWhichCharacterChosed] == true){
-				nowWhichCharacterChosed--;
-			}
-				
-			//prevent less than 1 situation
-			if (nowWhichCharacterChosed < 1)
-				nowWhichCharacterChosed++;
-			}
-		}
-		else if (keyPressed && keyCode == RIGHT){
-			if (nowWhichCharacterChosed > 0 && nowWhichCharacterChosed < 12){
-				nowWhichCharacterChosed+=4;
-				
-			//prevent more then 10 situation
-			if (nowWhichCharacterChosed > 11)
-				nowWhichCharacterChosed-=4;
-
-			//if the character was bought, then change to the previous character
-			while (boughtCharacter[nowWhichCharacterChosed] == true){
-				nowWhichCharacterChosed++;
-			}
-			
-			//prevent more than 10 situation
-			if (nowWhichCharacterChosed > 11)
-				nowWhichCharacterChosed--;
-			}
-		}*/
 		else if (keyPressed && keyCode == UP){
 			int temp = nowWhichCharacterChosed;
 			while(true){
@@ -226,116 +158,6 @@ public class Shop extends PApplet{
 		else if (!wantToGoBack()&&keyPressed && keyCode == ENTER){
 			this.client.setCharacter(nowWhichCharacterChosed,true);
 		}
-		//draw characters
-		//see if the character is bought and then give different brightness
-		/*if (boughtCharacter[1] == true)
-			tint(120);
-		else tint(0);
-		
-		//see if the character is now selected and then set as the brightest
-		if (nowWhichCharacterChosed == 1)
-			tint(255);
-		image(characters[1], width/13, height/15, 100, 150);
-		tint(0);
-			
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[2] == true)
-			tint(120);	
-		else tint(0);
-		
-		//see if the character is now selected and then set as the brightest
-		if (nowWhichCharacterChosed == 2)
-			tint(255);
-		image(characters[2], width/13, height/15*5-20, 100, 150);
-		tint(0);
-
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[3] == true)
-			tint(120);
-		else tint(0);
-
-		//see if the character is now selected and then set as the brightes
-		if (nowWhichCharacterChosed == 3)
-			tint(255);
-		image(characters[3], width/13, height/15*8+20, 100, 150);
-		tint(0);
-		
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[4] == true)
-			tint(120);
-		else tint(0);
-
-		//see if the character is now selected and then set as the brightest	
-		if (nowWhichCharacterChosed == 4)
-			tint(255);
-		image(characters[4], width/13, height/15*12-10, 100, 150);
-		tint(0);
-
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[5] == true)
-			tint(120);
-		else tint(0);
-
-		//see if the character is now selected and then set as the brightest
-		if (nowWhichCharacterChosed == 5)		
-			tint(255);
-		image(characters[5], width/13*5, height/15, 100, 150);
-		tint(0);
-
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[6] == true)
-			tint(120);
-		else tint(0);
-
-		//see if the character is now selected and then set as the brightest
-		if (nowWhichCharacterChosed == 6)
-			tint(255);
-		image(characters[6], width/13*5, height/15*5-20, 100, 150);
-		tint(0);
-
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[7] == true)
-			tint(120);
-		else tint(0);
-
-		//see if the character is now selected and then set as the brightest
-		if (nowWhichCharacterChosed == 7)
-			tint(255);
-		image(characters[7], width/13*5, height/15*8+20, 100, 150);
-		tint(0);
-
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[8] == true)
-			tint(120);
-		else tint(0);
-
-		//see if the character is now selected and then set as the brightest
-		if (nowWhichCharacterChosed == 8)
-			tint(255);
-		image(characters[8], width/13*5, height/15*12-10, 100, 150);
-		tint(0);
-
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[9] == true)
-			tint(120);
-		else tint(0);
-
-		//see if the character is now selected and then set as the brightest
-		if (nowWhichCharacterChosed == 9)
-			tint(255);
-		image(characters[9], width/13*9, height/15, 100, 150);
-		tint(0);
-
-		//see if the character is bought and then give different brightness
-		if (boughtCharacter[10] == true)
-			tint(120);
-		else tint(0);
-
-		//see if the character is now selected and then set as the brightest
-		if (nowWhichCharacterChosed == 10)
-			tint(255);
-		image(characters[10], width/13*9, height/15*5-20, 100, 150);
-		else tint(0);*/	
 		
 		for(int i=1;i<11;i++){
 			if (boughtCharacter[i] == true)
@@ -350,7 +172,7 @@ public class Shop extends PApplet{
 		
 		if (nowWhichCharacterChosed == 11){
 			tint(255);
-			image(characters[11], width/13*8, height/15*9-10, 150, 100);
+			image(characters[11], width/13*9, height/15*9-10, 150, 100);
 		}
 		else{
 			tint(255);
@@ -358,12 +180,12 @@ public class Shop extends PApplet{
 		}
 		tint(255);
 		
-		//text "~Welcome to Shop~"
+		//text "~Shop~"
 		fill(255, 255, 0);
-		text("~Welcome to Shop~", 60, 35);
+		text("~Shop~", 40, 35);
+		text("Money:"+money, 240, 35);
 		textSize(40);
 
-//		System.out.println("character number = " + nowWhichCharacterChosed);
 	}
 	public int getBoughtCharacter(){
 		//if return 11 means want to go back
