@@ -9,6 +9,8 @@ public class GameOver extends PApplet{
 	String[] topTenName;
 	int[] topTenScore;
 	private Client client;
+	private boolean rightButton;
+
 	public GameOver(Client client){
 		this.client=client;
 		//load background
@@ -27,10 +29,10 @@ public class GameOver extends PApplet{
 		
 		//set topTenName 
 		topTenName = new String[11];	
-/*		for(int i=1;i<11;i++){
+		for(int i=1;i<11;i++){
 			topTenName[i]=this.client.topTen[i-1];
 		}
-*/		//set topTenScore
+		//set topTenScore
 		//topTenScore = new int[11];
 
 	}
@@ -42,8 +44,6 @@ public class GameOver extends PApplet{
 		//set background and "Game Over" text images
 		image(this.background, 0, 0);
 		image(this.textGameOver, 40, 20);
-		image(this.playAgain, width/4, 600, 80, 80);
-		image(this.exit, width/4*2, 600, 80, 80);
 		
 		//list top ten score
 		for (int i=1; i < 11; i++){
@@ -51,15 +51,29 @@ public class GameOver extends PApplet{
 			textSize(35);
 		}
 		
-		//draw playAgain & exit icon
 		if (keyPressed && keyCode == ENTER){
 			
 		}
 		else if (keyPressed && keyCode == LEFT){
-			
+			rightButton = false;
 		}
 		else if (keyPressed && keyCode == RIGHT){
-			
+			rightButton = true;
+		}
+		//select play again or exit
+		if (rightButton){
+			tint(120);
+			image(this.playAgain, width/9*2, 600, 80, 80);
+			tint(255);
+			image(this.exit, width/10*6, 595, 90, 90);
+			tint(225);
+		}
+		else{
+			tint(255);
+			image(this.playAgain, width/9*2, 600, 80, 80);
+			tint(120);
+			image(this.exit, width/10*6, 595, 90, 90);
+			tint(225);
 		}
 	}
 }
