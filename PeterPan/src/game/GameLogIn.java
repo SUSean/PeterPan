@@ -53,12 +53,12 @@ public class GameLogIn extends JFrame{
 		
 		//the "User Name" label
 		nameLabel = new JLabel("User Name:");
-		nameLabel.setFont(new Font("標楷�?", Font.BOLD, 20));
+		nameLabel.setFont(new Font("標楷�?", Font.BOLD, 20));
 		nameLabel.setBounds(75, 80, 150, 50);
 		
 		//the "Password" label
 		passwordLabel = new JLabel("Password:");
-		passwordLabel.setFont(new Font("標楷�?", Font.BOLD, 20));
+		passwordLabel.setFont(new Font("標楷�?", Font.BOLD, 20));
 		passwordLabel.setBounds(75, 130, 150, 50);
 		
 		//the User Name textField
