@@ -47,7 +47,6 @@ public class Game extends JFrame{
 	}
 	public void initGameStart(){
 		this.gameStart=new GameStart(this,this.client);
-		System.out.println(this.client.coin);
 		this.gameStart.init();
 		this.gameStart.start();
 		

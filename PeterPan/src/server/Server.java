@@ -2,6 +2,7 @@ package server;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -118,7 +119,8 @@ public class Server {
 		sendMessageTo(connThread,messageString);
 	}
 
-	private void sendCorrect(ConnectionThread connThread,String name) throws JSONException {
+	private void sendCorrect(ConnectionThread connThread,String name) throws JSONException, IOException {
+		newFile(name);
 		JSONObject message = new JSONObject();
 		message.put("Type", "Correct");
 		message.put("Name", name);
@@ -148,7 +150,7 @@ public class Server {
 		sendMessageTo(connThread,messageString);
 		
 	}
-	public void receiveUser(ConnectionThread connThread,String userName, String password) throws JSONException {
+	public void receiveUser(ConnectionThread connThread,String userName, String password) throws JSONException, IOException {
 		for(String name : data.users.keySet()){
 			if(name.equals(userName)){
 				if(password.equals(data.users.get(name).password)){
@@ -183,7 +185,16 @@ public class Server {
 	private void sendMessageTo(ConnectionThread client,String message) {
 		client.sendMessage(message);
 	}
-	
+	public void newFile(String filePathAndName) throws IOException {
+		String filePath = "List/"+filePathAndName+".csv";
+		filePath = filePath.toString();
+		File myFilePath = new File(filePath);
+		if (!myFilePath.exists()) {
+			System.out.println(filePath);
+			myFilePath.createNewFile();
+			
+		}
+	}
 	public static void main(String[] args) throws JSONException {
 		
 		Server server = new Server(8000);
