@@ -22,7 +22,7 @@ public class GameStart extends PApplet{
 		this.moneyIcon = loadImage(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
 		//load background image
 		background = new PImage();
-		this.background = loadImage(this.getClass().getResource("/res/Background/background_4.jpg").getPath());
+		this.background = loadImage(this.getClass().getResource("/res/Background/logInBackground.jpg").getPath());
 		this.game=game;
 		this.client=client;
 		this.money=this.client.coin;
@@ -33,7 +33,7 @@ public class GameStart extends PApplet{
 	}
 	public void draw(){
 		background(255, 255, 255);
-		image(this.background, 0, 0, this.background.width, this.background.height);
+		image(this.background, -200, -700, this.background.width, this.background.height);
 		image(this.moneyIcon, 60, 20, 70, 70);
 		
 		if (keyPressed && keyCode == UP){//if press UP, then go to "Game Start" choice mode
