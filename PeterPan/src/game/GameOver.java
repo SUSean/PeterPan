@@ -11,8 +11,10 @@ public class GameOver extends PApplet{
 	private Client client;
 	private boolean rightButton;
 	private int isTopTenPlayer;
+	private Game game;
 
-	public GameOver(Client client){
+	public GameOver(Client client,Game game){
+		this.game=game;
 		this.client=client;
 		//load background
 		background = new PImage();
@@ -75,6 +77,9 @@ public class GameOver extends PApplet{
 			tint(255);
 			image(this.exit, width/10*6, 595, 90, 90);
 			tint(225);
+			if(keyPressed&&key==ENTER){
+				game.exitGame();
+			}
 		}
 		else{
 			tint(255);
@@ -82,6 +87,9 @@ public class GameOver extends PApplet{
 			tint(120);
 			image(this.exit, width/10*6, 595, 90, 90);
 			tint(225);
+			if(keyPressed&&key==ENTER){
+				game.restart();
+			}
 		}
 	}
 }

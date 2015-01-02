@@ -122,15 +122,24 @@ public class Game extends JFrame{
 	 */
 	public void gameOver() throws JSONException {
 		this.remove(this.gameScene);
+		gameScene.exit();
 		this.gameScene.destroy();
 		this.client.sendNewCoin(0);
 		this.client.sendNewScore(0);
 		this.client.sendOver();
-		this.endPanel=new GameOver(this.client);
+		this.endPanel=new GameOver(this.client,this);
 		endPanel.init();
 		endPanel.start();
 		this.add(endPanel);
 		//this.setVisible(true);
+	}
+	public void restart(){
+		remove(endPanel);
+		endPanel.destroy();
+		initGameStart();
+	}
+	public void exitGame(){
+		System.exit(0);
 	}
 
 	/**

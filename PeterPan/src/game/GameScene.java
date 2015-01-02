@@ -33,7 +33,7 @@ public class GameScene extends PApplet{
 	private int time=0;
 	private int levelUpAnimationTime=0;
 	private int messageShowTime=0;
-	private PImage backgroundImg,starImg;
+	private PImage backgroundImg,starImg,tunnelBackgroundImg;
 	public PImage[] characters,cloudImg;
 	private Tunnel[] tunnels;
 	private Character character;
@@ -48,7 +48,7 @@ public class GameScene extends PApplet{
 	private TopBarDelegate topBarDelegate;
 	private int score=0;
 	private Client client;
-	private int hitNumber;
+	private int hitNumber,t;
 	/**
 	 * Constructor of a game scene.
 	 * 
@@ -58,6 +58,7 @@ public class GameScene extends PApplet{
 	public GameScene(Game parentFrame,Client client,Model model) throws IOException{
 		this.parentFrame = parentFrame;
 		this.backgroundImg = loadImage(this.getClass().getResource(model.getBackground(0)).getPath());
+		tunnelBackgroundImg = loadImage(this.getClass().getResource("/res/Background/background.png").getPath());
 		this.characters=parentFrame.getCharacterImages();
 		this.model=model;
 		this.client=client;
@@ -157,6 +158,7 @@ public class GameScene extends PApplet{
 					}
 				}
 		}else{																//tunnel Mode
+			
 			if(tunnelModeStart){
 				this.character.moveToTunnelStartMode();
 				if(++messageShowTime==100){
@@ -175,6 +177,7 @@ public class GameScene extends PApplet{
 						e.printStackTrace();
 					}
 				}
+				image(this.tunnelBackgroundImg, 0, t++/5+700-this.tunnelBackgroundImg.height, this.tunnelBackgroundImg.width, this.tunnelBackgroundImg.height);
 				for(Cloud cloud : this.clouds)
 					for(int i=0;i<level;i++)cloud.display();
 				this.character.levelUpAnimation();
@@ -336,5 +339,10 @@ public class GameScene extends PApplet{
 			this.tunnels[1].tunnelColorRecover();
 			this.tunnels[0].tunnelColorRecover();
 		}
+	}
+	@SuppressWarnings("deprecation")
+	public void exit(){
+		this.music.musicStop();
+		this.music.stop();
 	}
 }
