@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -170,6 +171,8 @@ public class GameScene extends PApplet{
 				this.character.levelUpAnimation();
 			}
 			else{
+				choosingCategoryBackground();
+				setTunnelColor();
 				displayTunnel();
 				isHitTunnel();
 				if(!keyLock){
@@ -292,4 +295,34 @@ public class GameScene extends PApplet{
 	 * Keep removing the passed rock.
 	 */
 	
+	
+	public void choosingCategoryBackground(){
+		this.fill(240, 248, 255);
+		this.stroke(240, 248, 255);
+		this.rect(0, 0, (int)500/3, 700);
+		this.fill(230, 230, 250);
+		this.stroke(230, 230, 250);
+		this.rect((int)500/3, 0, (int)500/3+1, 700);
+		this.fill(255, 240, 245);
+		this.stroke(255, 240, 245);
+		this.rect((int)1000/3, 0, (int)500/3, 700);
+	}
+	
+	public void setTunnelColor(){
+		if(this.character.getX() < (int)500/3){
+			this.tunnels[0].tunnelHighlight();
+			this.tunnels[1].tunnelColorRecover();
+			this.tunnels[2].tunnelColorRecover();
+		}
+		else if(this.character.getX() < (int)1000/3){
+			this.tunnels[1].tunnelHighlight();
+			this.tunnels[0].tunnelColorRecover();
+			this.tunnels[2].tunnelColorRecover();
+		}
+		else if(this.character.getX() < (int)1500/3){
+			this.tunnels[2].tunnelHighlight();
+			this.tunnels[1].tunnelColorRecover();
+			this.tunnels[0].tunnelColorRecover();
+		}
+	}
 }
