@@ -48,8 +48,10 @@ public class User {
 		for(String[] string:data){
 			ArrayList<String> temp= new ArrayList<String>();
 			lists.put(string[0],temp);
-			for(int i=1;i<string.length;i++)
-				 temp.add(string[i]);
+			for(int i=1;i<string.length;i++){
+				temp.add(string[i]);
+			}
+				 
 		}	
 	}
 	public void writeList() throws IOException {
@@ -75,7 +77,7 @@ public class User {
 			ArrayList<String> temp= new ArrayList<String>();
 			lists.put(feel,temp);
 		}
-		if(!lists.containsValue("music_"+num))
+		if(!lists.get(feel).contains("music_"+num))
 			lists.get(feel).add("music_"+num);
 		writeList();
 	}
