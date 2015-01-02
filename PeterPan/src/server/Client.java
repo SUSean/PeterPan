@@ -111,6 +111,7 @@ public class Client {
 	public void sendNewScore(int score) throws JSONException {
 		JSONObject message = new JSONObject();
 		message.put("Type", "Score");
+		message.put("UserName", name);
 		message.put("Score", score);
 		String messageString = message.toString();
 		sendMessage(messageString);
@@ -118,9 +119,19 @@ public class Client {
 	public void sendNewCoin(int coin) throws JSONException {
 		JSONObject message = new JSONObject();
 		message.put("Type", "Coin");
+		message.put("UserName", name);
 		message.put("Coin", coin);
 		String messageString = message.toString();
 		sendMessage(messageString);
+	}
+	public void sendSong(String feel, int musicNum) throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "List");
+		message.put("UserName", name);
+		message.put("Feel", feel);
+		message.put("Song", musicNum);
+		String messageString = message.toString();
+		sendMessage(messageString);		
 	}
 	public void sendOver() throws JSONException {
 		JSONObject message = new JSONObject();
@@ -190,5 +201,6 @@ public class Client {
 		Client client = new Client();
 		client.setIPAddress("127.0.0.1").setPort(8000).connect();
 	}
+	
 
 }

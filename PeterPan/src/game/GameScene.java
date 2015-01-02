@@ -14,6 +14,7 @@ import model.Music;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
+import server.Client;
 
 public class GameScene extends PApplet{
 	
@@ -45,17 +46,20 @@ public class GameScene extends PApplet{
 	private PVector starVector;
 	private TopBarDelegate topBarDelegate;
 	private int score=0;
+	private Client client;
+	private int hitNumber;
 	/**
 	 * Constructor of a game scene.
 	 * 
 	 * @param  parentFrame | the JFrame that owns this game scene
 	 * @throws IOException 
 	 */
-	public GameScene(Game parentFrame,Model model) throws IOException{
+	public GameScene(Game parentFrame,Client client,Model model) throws IOException{
 		this.parentFrame = parentFrame;
 		this.backgroundImg = loadImage(this.getClass().getResource(model.getBackground(0)).getPath());
 		this.characters=parentFrame.getCharacterImages();
 		this.model=model;
+		this.client=client;
 		this.starImg = loadImage(this.getClass().getResource("/res/starGold.png").getPath());
 		this.cloudImg=new PImage[2];
 		this.cloudImg[0] = loadImage(this.getClass().getResource("/res/Background/cloud_1.png").getPath());
@@ -163,7 +167,12 @@ public class GameScene extends PApplet{
 			else if(tunnelModeEnd){
 				if(++levelUpAnimationTime==500){
 					levelUpAnimationTime=0;
-					nextLevel();
+					try {
+						nextLevel();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				for(Cloud cloud : this.clouds)
 					for(int i=0;i<level;i++)cloud.display();
@@ -270,7 +279,7 @@ public class GameScene extends PApplet{
 		for(Tunnel tunnel : this.tunnels)
 			for(int i=0;i<5;i++)tunnel.display();
 	}
-	public void nextLevel(){
+	public void nextLevel() throws JSONException{
 		level++;
 		tunnelMode=false;
 		tunnelModeStart=true;
@@ -278,14 +287,17 @@ public class GameScene extends PApplet{
 		this.clouds.removeAll(clouds);
 		makeClouds();
 		this.music.musicStop();
+		this.client.sendSong(this.tunnels[hitNumber].string,this.music.musicNum);
 		this.music.musicRestart();
 		System.out.println("next");
 		newBackground();
+		
 	}
 	public int getChosenCharater(){
 		return this.chosenCharacter;
 	}
 	private void setHitNumber(int x){
+		this.hitNumber=x;
 		System.out.printf("tunnel %d\n",x);
 	}
 	/**

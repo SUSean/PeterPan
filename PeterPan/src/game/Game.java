@@ -96,7 +96,7 @@ public class Game extends JFrame{
 	public void start() throws IOException{
 		this.topBar = new TopBar(new Rectangle(bounds.width, 50));
 
-		this.gameScene = new GameScene(this,this.model);
+		this.gameScene = new GameScene(this,this.client,this.model);
 		this.gameScene.init();
 		this.gameScene.start();
 		this.gameScene.setTopBarDelegate(topBar);

@@ -9,7 +9,7 @@ import processing.core.PFont;
 
 
 public class Tunnel {
-	private String string;
+	public String string;
 	private PApplet parent;
 	private GameScene gamescene;
 	float x,y,w,h;

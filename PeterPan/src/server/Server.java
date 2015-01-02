@@ -82,6 +82,9 @@ public class Server {
 						else if(type.equals("Over")){
 							sendTopTen(this,data.getTopTen());
 						}
+						else if(type.equals("List")){
+							receiveSong(message.getString("UserName"),message.getString("Feel"),message.getInt("Song"));
+						}
 					}
 					else 
 						break;
@@ -181,6 +184,11 @@ public class Server {
 			temp.addCharacter(i,"false");
 		sendCorrect(connThread,userName);
 	}
+	public void receiveSong(String name, String feel, int num) throws IOException {
+		
+		data.users.get(name).addSong(feel,num);
+		
+	}
 	
 	private void sendMessageTo(ConnectionThread client,String message) {
 		client.sendMessage(message);
@@ -191,8 +199,7 @@ public class Server {
 		File myFilePath = new File(filePath);
 		if (!myFilePath.exists()) {
 			System.out.println(filePath);
-			myFilePath.createNewFile();
-			
+			myFilePath.createNewFile();			
 		}
 	}
 	public static void main(String[] args) throws JSONException {

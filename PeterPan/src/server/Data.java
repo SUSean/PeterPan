@@ -41,6 +41,7 @@ public class Data {
 			for(int i=0;i<10;i++){
 				temp.addCharacter(i,string[i+4]);
 			}
+			temp.addList();
 		}	
 	}
 	public String[] getTopTen(){
