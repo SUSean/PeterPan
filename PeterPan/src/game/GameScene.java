@@ -83,9 +83,9 @@ public class GameScene extends PApplet{
 		
 		this.tunnels=new Tunnel[tunnelNum];
 
-		this.tunnels[0]=new Tunnel(this,this,0,-1);
-		this.tunnels[1]=new Tunnel(this,this,170,-1);
-		this.tunnels[2]=new Tunnel(this,this,340,-1);
+		this.tunnels[0]=new Tunnel(this,this,"happy",0,-1);
+		this.tunnels[1]=new Tunnel(this,this,"normal",170,-1);
+		this.tunnels[2]=new Tunnel(this,this,"sad",340,-1);
 		
 	}
 	

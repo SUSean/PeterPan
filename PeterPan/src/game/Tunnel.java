@@ -1,34 +1,42 @@
 package game;
 
+import java.awt.Font;
+
 import javax.swing.JLabel;
 
 import processing.core.PApplet;
+import processing.core.PFont;
+
 
 public class Tunnel {
 	private String string;
 	private PApplet parent;
 	private GameScene gamescene;
 	float x,y,w,h;
-	Tunnel(PApplet parent,GameScene gameScene,int x,int y){
+	private Font font;
+	Tunnel(PApplet parent,GameScene gameScene, String word,int x,int y){
 		this.parent=parent;
 		this.gamescene=gameScene;
-		this.string="happy";
+		this.string=word;
 		this.x=x;
 		this.y=y;
 		this.w=160;
 		this.h=30;
-		
+		font = new Font(Font.DIALOG_INPUT, Font.BOLD, 40);
 	}
 	public void display(){
 		this.y+=(float)0.2;
-		this.parent.fill(0, 102, 153);
-		this.parent.textSize(32);
-		this.parent.text(string,x,y,w,h);
 		if(y==gamescene.displayHeight){
 			y=0;
 			gamescene.tunnelMode=false;
 		}
+		this.parent.fill(0, 0, 0);
 		this.parent.rect(x,y,w,h);
+		this.parent.fill(255,255,255);
+		this.parent.setFont(font);
+		this.parent.textSize(32);
+		this.parent.text(this.string , x, y+25);
+		
 	}
 	public float getX(){
 		return this.x;
