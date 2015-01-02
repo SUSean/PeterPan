@@ -48,7 +48,7 @@ public class User {
 		for(String[] string:data){
 			ArrayList<String> temp= new ArrayList<String>();
 			lists.put(string[0],temp);
-			for(int i=1;i<=string.length;i++)
+			for(int i=1;i<string.length;i++)
 				 temp.add(string[i]);
 		}	
 	}
