@@ -40,7 +40,6 @@ public class Music extends Thread{
 	    //tell whether to continue playing by continue
 	    public void run(){
 	    	while(isContinue){
-	    		System.out.println("Pre");
 	    		play();
 	    		try {
 					Thread.sleep(1000);
