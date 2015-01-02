@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,12 +15,13 @@ import model.Music;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
+import server.Client;
 
 public class GameScene extends PApplet{
 	
 	public static final int MARGIN_TOP = 50;
 	public static final int NUM_OF_STARS = 10;
-	public static final int NUM_OF_CLOUDS = 40;
+	public static final int NUM_OF_CLOUDS = 30;
 	public static final int tunnelNum = 3;
 	public static final int keypressedTime = 10;
 	public boolean tunnelMode=false;
@@ -31,7 +33,7 @@ public class GameScene extends PApplet{
 	private int time=0;
 	private int levelUpAnimationTime=0;
 	private int messageShowTime=0;
-	private PImage backgroundImg,starImg,tunnelBackgroundImg;
+	private PImage backgroundImg,starImg;
 	public PImage[] characters,cloudImg;
 	private Tunnel[] tunnels;
 	private Character character;
@@ -44,19 +46,21 @@ public class GameScene extends PApplet{
 	private PVector characterVector;
 	private PVector starVector;
 	private TopBarDelegate topBarDelegate;
-	private int score=0,t=0;
+	private int score=0;
+	private Client client;
+	private int hitNumber;
 	/**
 	 * Constructor of a game scene.
 	 * 
 	 * @param  parentFrame | the JFrame that owns this game scene
 	 * @throws IOException 
 	 */
-	public GameScene(Game parentFrame,Model model) throws IOException{
+	public GameScene(Game parentFrame,Client client,Model model) throws IOException{
 		this.parentFrame = parentFrame;
 		this.backgroundImg = loadImage(this.getClass().getResource(model.getBackground(0)).getPath());
-		tunnelBackgroundImg = loadImage(this.getClass().getResource("/res/Background/background.png").getPath());
 		this.characters=parentFrame.getCharacterImages();
 		this.model=model;
+		this.client=client;
 		this.starImg = loadImage(this.getClass().getResource("/res/starGold.png").getPath());
 		this.cloudImg=new PImage[2];
 		this.cloudImg[0] = loadImage(this.getClass().getResource("/res/Background/cloud_1.png").getPath());
@@ -84,9 +88,9 @@ public class GameScene extends PApplet{
 		
 		this.tunnels=new Tunnel[tunnelNum];
 
-		this.tunnels[0]=new Tunnel(this,this,0,-1);
-		this.tunnels[1]=new Tunnel(this,this,170,-1);
-		this.tunnels[2]=new Tunnel(this,this,340,-1);
+		this.tunnels[0]=new Tunnel(this,this,"happy",0,-1);
+		this.tunnels[1]=new Tunnel(this,this,"normal",170,-1);
+		this.tunnels[2]=new Tunnel(this,this,"sad",340,-1);
 		
 	}
 	
@@ -97,7 +101,7 @@ public class GameScene extends PApplet{
 	public void draw(){
 		background(255, 255, 255);
 		if(!tunnelMode){
-				if(time++==300){
+				if(time++==500){
 					time=0;
 					if(score<(level*level)*2){
 						try {
@@ -131,7 +135,7 @@ public class GameScene extends PApplet{
 				this.character.display();
 				//Refresh top bar message
 				
-				topBarDelegate.setMoney(this.score);
+				topBarDelegate.setScore(this.score);
 				topBarDelegate.setLevel(this.level);
 				
 				for(Stars stars : this.stars)
@@ -144,7 +148,7 @@ public class GameScene extends PApplet{
 					this.score++;
 				}
 				
-				if(level==5){
+				if(level==10){
 					try {
 						parentFrame.gameOver();
 					} catch (JSONException e) {
@@ -153,7 +157,6 @@ public class GameScene extends PApplet{
 					}
 				}
 		}else{																//tunnel Mode
-			image(this.tunnelBackgroundImg, 0, t++/5+700-this.tunnelBackgroundImg.height, this.tunnelBackgroundImg.width, this.tunnelBackgroundImg.height);
 			if(tunnelModeStart){
 				this.character.moveToTunnelStartMode();
 				if(++messageShowTime==100){
@@ -165,13 +168,20 @@ public class GameScene extends PApplet{
 			else if(tunnelModeEnd){
 				if(++levelUpAnimationTime==500){
 					levelUpAnimationTime=0;
-					nextLevel();
+					try {
+						nextLevel();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				for(Cloud cloud : this.clouds)
 					for(int i=0;i<level;i++)cloud.display();
 				this.character.levelUpAnimation();
 			}
 			else{
+				choosingCategoryBackground();
+				setTunnelColor();
 				displayTunnel();
 				isHitTunnel();
 				if(!keyLock){
@@ -242,6 +252,7 @@ public class GameScene extends PApplet{
 		for(int a=0;a<tunnelNum;a++){
 					if( tunnels[a].getX()<X+W/2 && X<(tunnels[a].getX()+160)
 							&& Y<tunnels[a].getY()+30){
+						System.out.printf("hit tunnel W=%f X=%f TX=%f\n",W,X,tunnels[a].getX());
 						setHitNumber(a);
 						tunnelModeEnd=true;
 						for(int i=0;i<tunnelNum;i++)tunnels[i].setY(-1);
@@ -271,7 +282,7 @@ public class GameScene extends PApplet{
 		for(Tunnel tunnel : this.tunnels)
 			for(int i=0;i<5;i++)tunnel.display();
 	}
-	public void nextLevel(){
+	public void nextLevel() throws JSONException{
 		level++;
 		tunnelMode=false;
 		tunnelModeStart=true;
@@ -279,23 +290,51 @@ public class GameScene extends PApplet{
 		this.clouds.removeAll(clouds);
 		makeClouds();
 		this.music.musicStop();
+		this.client.sendSong(this.tunnels[hitNumber].string,this.music.musicNum);
 		this.music.musicRestart();
 		System.out.println("next");
 		newBackground();
+		
 	}
 	public int getChosenCharater(){
 		return this.chosenCharacter;
 	}
 	private void setHitNumber(int x){
+		this.hitNumber=x;
 		System.out.printf("tunnel %d\n",x);
-	}
-	@SuppressWarnings("deprecation")
-	public void exit(){
-		this.music.musicStop();
-		this.music.stop();
 	}
 	/**
 	 * Keep removing the passed rock.
 	 */
 	
+	
+	public void choosingCategoryBackground(){
+		this.fill(240, 248, 255);
+		this.stroke(240, 248, 255);
+		this.rect(0, 0, (int)500/3, 700);
+		this.fill(230, 230, 250);
+		this.stroke(230, 230, 250);
+		this.rect((int)500/3, 0, (int)500/3+1, 700);
+		this.fill(255, 240, 245);
+		this.stroke(255, 240, 245);
+		this.rect((int)1000/3, 0, (int)500/3, 700);
+	}
+	
+	public void setTunnelColor(){
+		if(this.character.getX() < (int)500/3){
+			this.tunnels[0].tunnelHighlight();
+			this.tunnels[1].tunnelColorRecover();
+			this.tunnels[2].tunnelColorRecover();
+		}
+		else if(this.character.getX() < (int)1000/3){
+			this.tunnels[1].tunnelHighlight();
+			this.tunnels[0].tunnelColorRecover();
+			this.tunnels[2].tunnelColorRecover();
+		}
+		else if(this.character.getX() < (int)1500/3){
+			this.tunnels[2].tunnelHighlight();
+			this.tunnels[1].tunnelColorRecover();
+			this.tunnels[0].tunnelColorRecover();
+		}
+	}
 }
