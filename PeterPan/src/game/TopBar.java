@@ -45,7 +45,7 @@ public class TopBar extends JPanel implements TopBarDelegate{
 	 */
 	private void initComponents(){
 		
-		this.labelMoneyImage = new JLabel(new ImageIcon(this.getClass().getResource("/res/Shop/money_icon_small.png").getPath()));
+		this.labelMoneyImage = new JLabel(new ImageIcon(this.getClass().getResource("/res/starGold.png").getPath()));
 		this.labelMoneyImage.setVisible(true);
 		this.add(labelMoneyImage);
 		this.label_score = new JLabel(score);
