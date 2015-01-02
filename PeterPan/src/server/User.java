@@ -75,7 +75,8 @@ public class User {
 			ArrayList<String> temp= new ArrayList<String>();
 			lists.put(feel,temp);
 		}
-		lists.get(feel).add("music_"+num);
+		if(!lists.containsValue("music_"+num))
+			lists.get(feel).add("music_"+num);
 		writeList();
 	}
 }

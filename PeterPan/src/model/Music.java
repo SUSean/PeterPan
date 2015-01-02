@@ -47,10 +47,10 @@ public class Music extends Thread{
 	    // load and play this song
 	    public void play() {
 	    	Random random = new Random();
-	    	int a = (int)(random.nextInt(Model.musicNum)+1);
+	    	int a = (int)(random.nextInt(Model.musicNum));
 	        try {
 	            player = players.get(a);
-	            musicNum = a;
+	            musicNum = a+1;
 	            player.play();
 	        } catch (Exception e) {
 	            System.out.println(e);
