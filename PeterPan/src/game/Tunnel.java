@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -14,6 +15,7 @@ public class Tunnel {
 	private GameScene gamescene;
 	float x,y,w,h;
 	private Font font;
+	private int[] color = {220,220,220};
 	Tunnel(PApplet parent,GameScene gameScene, String word,int x,int y){
 		this.parent=parent;
 		this.gamescene=gameScene;
@@ -30,11 +32,12 @@ public class Tunnel {
 			y=0;
 			gamescene.tunnelMode=false;
 		}
-		this.parent.fill(0, 0, 0);
+		this.parent.fill(this.color[0], this.color[1], this.color[2]);
+		this.parent.stroke(this.color[0], this.color[1], this.color[2]);
 		this.parent.rect(x,y,w,h);
-		this.parent.fill(255,255,255);
+		this.parent.fill(0, 134, 139);
 		this.parent.setFont(font);
-		this.parent.textSize(32);
+		this.parent.textSize(30);
 		this.parent.text(this.string , x, y+25);
 		
 	}
@@ -46,5 +49,16 @@ public class Tunnel {
 	}
 	public void setY(float y){
 		this.y=y;
+	}
+	
+	public void tunnelHighlight(){
+		this.color[0] = 255;
+		this.color[1] = 228;
+		this.color[2] = 181;
+	}
+	public void tunnelColorRecover(){
+		this.color[0] = 220;
+		this.color[1] = 220;
+		this.color[2] = 220;
 	}
 }

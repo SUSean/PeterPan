@@ -74,6 +74,7 @@ public class Character extends PApplet {
 		
 	}
 	public void tunnelModeDisplay(){
+		
 		switch(this.movement){
 		case LEFT:
 			if(tunnelNum>0)
