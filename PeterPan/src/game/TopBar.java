@@ -27,15 +27,12 @@ public class TopBar extends JPanel implements TopBarDelegate{
 	
 	private JLabel label_level;
 	private JLabel label_score;
-	//private int level;
-	//private int money;
 	private String level;
 	private String score;
-	private BufferedImage image;
-	private JLabel label_image;
+	private JLabel labelMoneyImage;
+	private JLabel labelFlagImage;
 	
 	public TopBar(Rectangle bounds){
-//		this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
 		this.setBounds(bounds);
 		this.setBackground(new Color(63,90,108));
 		this.initComponents();
@@ -47,19 +44,17 @@ public class TopBar extends JPanel implements TopBarDelegate{
 	 * A method for initializing what top bar contains.
 	 */
 	private void initComponents(){
-		BufferedImage bi = null;
-//		this.label_image = new JLabel(new ImageIcon(this.getClass().getResource("/res/Shop/money_icon.png").getPath()));
-		ImageIcon ii = new ImageIcon(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
-		bi = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
-		Graphics2D g2d = (Graphics2D) bi.createGraphics();
-		g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
-		g2d.drawImage(ii.getImage(), 0,  0, 50, 50, null);
-//		this.label_image.setVisible(true);
-//		this.add(label_image);
+		
+		this.labelMoneyImage = new JLabel(new ImageIcon(this.getClass().getResource("/res/Shop/money_icon_small.png").getPath()));
+		this.labelMoneyImage.setVisible(true);
+		this.add(labelMoneyImage);
 		this.label_score = new JLabel(score);
 		this.label_score.setFont(new Font("Arial", 0, 30));
 		this.label_score.setForeground(new Color(222,217,214));
 		this.add(label_score);
+		this.labelFlagImage = new JLabel(new ImageIcon(this.getClass().getResource("/res/Shop/redflag.png").getPath()));
+		this.labelFlagImage.setVisible(true);
+		this.add(labelFlagImage);
 		this.label_level = new JLabel(level);
 		this.label_level.setFont(new Font("Arial", 0, 30));
 		this.label_level.setForeground(new Color(222,217,214));

@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,7 +29,7 @@ public class GameLogIn extends JFrame{
 	private String userName;
 	private String password;
 	private JPanel mainPanel;
-	private JLabel gameNameLabel, nameLabel, passwordLabel, createNewAccountLabel;
+	private JLabel gameNameLabel, nameLabel, passwordLabel, createNewAccountLabel, background;
 	private JTextField nameTextField, passwordTextField;
 	private JButton logInButton;
 	private int ifClicked; 
@@ -42,6 +43,10 @@ public class GameLogIn extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		
+		//background
+		background = new JLabel(new ImageIcon(this.getClass().getResource("/res/Background/logInBackground.jpg").getPath()));
+		background.setVisible(true);
+		background.setBounds(0, 0, 500, 700);
 		//main panel
 		mainPanel = new JPanel();
 		mainPanel.setBounds(new Rectangle(500, 700));
@@ -49,16 +54,22 @@ public class GameLogIn extends JFrame{
 		// the Game name "~Peter Pan~" label
 		gameNameLabel = new JLabel("~Peter Pan~");
 		gameNameLabel.setFont(new Font("JSLDataGothicC_NC", Font.BOLD, 32));
+		gameNameLabel.setForeground(Color.YELLOW);
+		gameNameLabel.setOpaque(false);
 		gameNameLabel.setBounds(155, 20, 360, 50);
 		
 		//the "User Name" label
 		nameLabel = new JLabel("User Name:");
 		nameLabel.setFont(new Font("標楷�?", Font.BOLD, 20));
+		nameLabel.setForeground(Color.yellow);
+		nameLabel.setOpaque(false);
 		nameLabel.setBounds(75, 80, 150, 50);
 		
 		//the "Password" label
 		passwordLabel = new JLabel("Password:");
 		passwordLabel.setFont(new Font("標楷�?", Font.BOLD, 20));
+		passwordLabel.setForeground(Color.yellow);
+		passwordLabel.setOpaque(false);
 		passwordLabel.setBounds(75, 130, 150, 50);
 		
 		//the User Name textField
@@ -151,6 +162,7 @@ public class GameLogIn extends JFrame{
 		this.add(gameNameLabel);
 		this.add(nameLabel);
 		this.add(passwordLabel);
+		this.add(background);
 		this.add(mainPanel);
 		this.setVisible(true);
 	}

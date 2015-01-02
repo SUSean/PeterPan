@@ -188,7 +188,7 @@ public class Shop extends PApplet{
 		//text "~Shop~"
 		fill(255, 255, 0);
 		text("~Shop~", 40, 35);
-		text("Money:"+money, 240, 35);
+		text("Money:"+money, 230, 35);
 		textSize(40);
 
 	}
