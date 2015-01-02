@@ -47,6 +47,7 @@ public class Game extends JFrame{
 	}
 	public void initGameStart(){
 		this.gameStart=new GameStart(this,this.client);
+		System.out.println(this.client.coin);
 		this.gameStart.init();
 		this.gameStart.start();
 		
@@ -96,7 +97,7 @@ public class Game extends JFrame{
 	public void start() throws IOException{
 		this.topBar = new TopBar(new Rectangle(bounds.width, 50));
 
-		this.gameScene = new GameScene(this,this.client,this.model);
+		this.gameScene = new GameScene(this,this.model);
 		this.gameScene.init();
 		this.gameScene.start();
 		this.gameScene.setTopBarDelegate(topBar);
@@ -122,15 +123,23 @@ public class Game extends JFrame{
 	 */
 	public void gameOver() throws JSONException {
 		this.remove(this.gameScene);
+		gameScene.exit();
 		this.gameScene.destroy();
 		this.client.sendNewCoin(0);
 		this.client.sendNewScore(0);
 		this.client.sendOver();
-		this.endPanel=new GameOver(this.client);
+		this.endPanel=new GameOver(this.client,this);
 		endPanel.init();
 		endPanel.start();
 		this.add(endPanel);
-		//this.setVisible(true);
+	}
+	public void restart(){
+		remove(endPanel);
+		endPanel.destroy();
+		initGameStart();
+	}
+	public void exitGame(){
+		System.exit(0);
 	}
 
 	/**
