@@ -27,7 +27,7 @@ public class Tunnel {
 		font = new Font(Font.DIALOG_INPUT, Font.BOLD, 40);
 	}
 	public void display(){
-		this.y+=(float)0.2;
+		this.y+=1;
 		if(y==gamescene.displayHeight){
 			y=0;
 			gamescene.tunnelMode=false;

@@ -79,11 +79,20 @@ public class Server {
 						else if(type.equals("Register")){
 							receiveRegister(this,message.getString("UserName"),message.getString("Password"));
 						}
+						else if(type.equals("Score")){
+							receiveNewScore(message.getString("UserName"),message.getInt("Score"));
+						}
+						else if(type.equals("Coin")){
+							receiveNewCoin(message.getString("UserName"),message.getInt("Coin"));
+						}
 						else if(type.equals("Over")){
 							sendTopTen(this,data.getTopTen());
 						}
 						else if(type.equals("List")){
 							receiveSong(message.getString("UserName"),message.getString("Feel"),message.getInt("Song"));
+						}
+						else if(type.equals("GameOver")){
+							data.dataWrite();
 						}
 					}
 					else 
@@ -121,7 +130,6 @@ public class Server {
 		String messageString = message.toString();
 		sendMessageTo(connThread,messageString);
 	}
-
 	private void sendCorrect(ConnectionThread connThread,String name) throws JSONException, IOException {
 		newFile(name);
 		JSONObject message = new JSONObject();
@@ -185,11 +193,14 @@ public class Server {
 		sendCorrect(connThread,userName);
 	}
 	public void receiveSong(String name, String feel, int num) throws IOException {
-		
 		data.users.get(name).addSong(feel,num);
-		
 	}
-	
+	public void receiveNewScore(String name, int score) {
+		data.users.get(name).addHighScore(Integer.toString(score));
+	}
+	public void receiveNewCoin(String name, int coin) {
+		data.users.get(name).addCoin(Integer.toString(coin));
+	}
 	private void sendMessageTo(ConnectionThread client,String message) {
 		client.sendMessage(message);
 	}

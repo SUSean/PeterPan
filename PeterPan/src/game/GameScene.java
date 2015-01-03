@@ -46,7 +46,8 @@ public class GameScene extends PApplet{
 	private PVector characterVector;
 	private PVector starVector;
 	private TopBarDelegate topBarDelegate;
-	private int score=0;
+	public int score=0;
+	public int earnCoin=0;
 	private Client client;
 	private int hitNumber,t;
 	/**
@@ -139,8 +140,11 @@ public class GameScene extends PApplet{
 				topBarDelegate.setScore(this.score);
 				topBarDelegate.setLevel(this.level);
 				
-				for(Stars stars : this.stars)
+				for(Stars stars : this.stars){
 					for(int i=0;i<level;i++)stars.display();
+				}
+					
+					
 				if(this.stars.size()==0){
 					addStar();
 				}
@@ -158,7 +162,6 @@ public class GameScene extends PApplet{
 					}
 				}
 		}else{																//tunnel Mode
-			
 			if(tunnelModeStart){
 				this.character.moveToTunnelStartMode();
 				if(++messageShowTime==100){
@@ -283,7 +286,7 @@ public class GameScene extends PApplet{
 	}
 	private void displayTunnel(){
 		for(Tunnel tunnel : this.tunnels)
-			for(int i=0;i<5;i++)tunnel.display();
+			tunnel.display();
 	}
 	public void nextLevel() throws JSONException{
 		level++;
@@ -292,6 +295,8 @@ public class GameScene extends PApplet{
 		tunnelModeEnd=false;
 		this.clouds.removeAll(clouds);
 		makeClouds();
+		this.stars.removeAll(stars);
+		for(int i=0;i<NUM_OF_STARS;i++)addStar();
 		this.music.musicStop();
 		this.client.sendSong(this.tunnels[hitNumber].string,this.music.musicNum);
 		this.music.musicRestart();

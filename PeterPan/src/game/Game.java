@@ -121,11 +121,15 @@ public class Game extends JFrame{
 	 * @throws JSONException 
 	 */
 	public void gameOver() throws JSONException {
+		if(this.gameScene.score>this.client.highScore){
+			this.client.highScore=this.gameScene.score;
+			this.client.sendNewScore();
+		}
+		this.client.coin+=this.gameScene.earnCoin;
+		this.client.sendNewCoin();
 		this.remove(this.gameScene);
 		gameScene.exit();
 		this.gameScene.destroy();
-		this.client.sendNewCoin(0);
-		this.client.sendNewScore(0);
 		this.client.sendOver();
 		this.endPanel=new GameOver(this.client,this);
 		endPanel.init();
@@ -138,7 +142,8 @@ public class Game extends JFrame{
 		endPanel.destroy();
 		initGameStart();
 	}
-	public void exitGame(){
+	public void exitGame() throws JSONException{
+		this.client.sendGameOver();
 		System.exit(0);
 	}
 
