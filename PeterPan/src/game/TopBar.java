@@ -82,7 +82,7 @@ public class TopBar extends JPanel implements TopBarDelegate{
 		this.label_score.setText(this.score);
 	}
 	public void setHighestScore(int highestScore){
-		this.highestScore = ""+highestScore;
+		this.highestScore =Integer.toString(highestScore);
 		this.label_highest.setText(this.highestScore);
 	}
 }

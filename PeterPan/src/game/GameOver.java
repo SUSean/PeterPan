@@ -54,7 +54,7 @@ public class GameOver extends PApplet{
 		size(500, 700);
 	}
 	public void draw(){
-		
+		image(this.background, 0, 0);
 		//set background and "Game Over" & "win"
 		if(isWin){
 			image(this.winImage, 150, 0, 200, 100);
@@ -107,5 +107,8 @@ public class GameOver extends PApplet{
 				game.restart();
 			}
 		}
+	}
+	public void setIsWin(boolean flag){
+		this.isWin=flag;
 	}
 }

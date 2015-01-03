@@ -26,7 +26,7 @@ public class Game extends JFrame{
 	private Character character;
 	private Shop shop;
 	private GameOver endPanel;
-
+	public boolean winFlag;
 	/**
 	 * Constructor of a game 
 	 */
@@ -94,13 +94,14 @@ public class Game extends JFrame{
 	 * @throws IOException 
 	 */
 	public void start() throws IOException{
+		this.winFlag = false;
 		this.topBar = new TopBar(new Rectangle(bounds.width, 50));
 
 		this.gameScene = new GameScene(this,this.client,this.model);
 		this.gameScene.init();
 		this.gameScene.start();
 		this.gameScene.setTopBarDelegate(topBar);
-		
+		this.topBar.setHighestScore(this.client.highScore);
 		this.gameStart.destroy();
 		this.remove(chooseCharacter);
 		chooseCharacter.stop();
@@ -133,6 +134,7 @@ public class Game extends JFrame{
 		this.remove(topBar);
 		this.client.sendOver();
 		this.endPanel=new GameOver(this.client,this);
+		this.endPanel.setIsWin(winFlag);
 		endPanel.init();
 		endPanel.start();
 		this.add(endPanel);

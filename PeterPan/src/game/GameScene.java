@@ -68,6 +68,7 @@ public class GameScene extends PApplet{
 		this.cloudImg[0] = loadImage(this.getClass().getResource("/res/Background/cloud_1.png").getPath());
 		this.cloudImg[1] = loadImage(this.getClass().getResource("/res/Background/cloud_2.png").getPath());
 		this.requestFocus();
+		
 	}
 	
 	public void setup(){
@@ -298,6 +299,7 @@ public class GameScene extends PApplet{
 		newBackground();
 		if(level==11){
 			try {
+				this.parentFrame.winFlag=true;
 			parentFrame.gameOver();
 			} catch (JSONException e) {
 			// TODO Auto-generated catch block
