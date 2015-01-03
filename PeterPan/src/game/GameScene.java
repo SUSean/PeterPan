@@ -103,6 +103,7 @@ public class GameScene extends PApplet{
 	public void draw(){
 		background(255, 255, 255);
 		if(!tunnelMode){
+				
 				if(time++==500){
 					time=0;
 					if(score<(level*level)*2){
@@ -153,14 +154,7 @@ public class GameScene extends PApplet{
 					this.score++;
 				}
 				
-				if(level==10){
-					try {
-						parentFrame.gameOver();
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+				
 		}else{																//tunnel Mode
 			if(tunnelModeStart){
 				this.character.moveToTunnelStartMode();
@@ -298,11 +292,18 @@ public class GameScene extends PApplet{
 		this.stars.removeAll(stars);
 		for(int i=0;i<NUM_OF_STARS;i++)addStar();
 		this.music.musicStop();
-		this.client.sendSong(this.tunnels[hitNumber].string,this.music.musicNum);
+		this.client.sendSong(this.tunnels[hitNumber].string,this.music.musicName);
 		this.music.musicRestart();
 		System.out.println("next");
 		newBackground();
-		
+		if(level==11){
+			try {
+			parentFrame.gameOver();
+			} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			}
+		}
 	}
 	public int getChosenCharater(){
 		return this.chosenCharacter;

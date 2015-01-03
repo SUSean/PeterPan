@@ -130,6 +130,7 @@ public class Game extends JFrame{
 		this.remove(this.gameScene);
 		gameScene.exit();
 		this.gameScene.destroy();
+		this.remove(topBar);
 		this.client.sendOver();
 		this.endPanel=new GameOver(this.client,this);
 		endPanel.init();
