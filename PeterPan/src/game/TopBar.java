@@ -27,10 +27,13 @@ public class TopBar extends JPanel implements TopBarDelegate{
 	
 	private JLabel label_level;
 	private JLabel label_score;
+	private JLabel label_highest;
 	private String level;
 	private String score;
+	private String highestScore;
 	private JLabel labelMoneyImage;
 	private JLabel labelFlagImage;
+	private JLabel labelHighestScoreImage;
 	
 	public TopBar(Rectangle bounds){
 		this.setBounds(bounds);
@@ -59,6 +62,13 @@ public class TopBar extends JPanel implements TopBarDelegate{
 		this.label_level.setFont(new Font("Arial", 0, 30));
 		this.label_level.setForeground(new Color(222,217,214));
 		this.add(label_level);
+		this.labelHighestScoreImage = new JLabel(new ImageIcon(this.getClass().getResource("/res/Shop/HighestScore.png").getPath()));
+		this.labelHighestScoreImage.setVisible(true);
+		this.add(labelHighestScoreImage);
+		this.label_highest = new JLabel(highestScore);
+		this.label_highest.setFont(new Font("Arial", 0, 30));
+		this.label_highest.setForeground(new Color(222, 217, 214));
+		this.add(label_highest);
 	}
 	@Override
 	
@@ -70,6 +80,9 @@ public class TopBar extends JPanel implements TopBarDelegate{
 	public void setScore(int score){
 		this.score = "Score: "+score;
 		this.label_score.setText(this.score);
-		
+	}
+	public void setHighestScore(int highestScore){
+		this.highestScore = ""+highestScore;
+		this.label_highest.setText(this.highestScore);
 	}
 }
