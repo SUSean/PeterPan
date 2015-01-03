@@ -15,7 +15,7 @@ public class Music extends Thread{
 	    private BufferedInputStream buffer;
 	    private boolean isContinue; 
 	    private ArrayList<Player> players;
-	    public int musicNum = 0; 
+	    public int musicName = 0; 
 	    
 	    // give music name 
 	    public Music() throws FileNotFoundException {
@@ -41,13 +41,13 @@ public class Music extends Thread{
 	    public void run(){
 	    	while(isContinue){
 	    		play();
+	    		System.out.println("OK"+musicName);
 	    		try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	    		System.out.println("OK"+musicNum);
+	    			Thread.sleep(100);
+	    		} catch (InterruptedException e) {
+	    			// TODO Auto-generated catch block
+	    			e.printStackTrace();
+	    		}
 	    	}
 	    }
 	    
@@ -57,7 +57,7 @@ public class Music extends Thread{
 	    	int a = (int)(random.nextInt(Model.musicNum));
 	        try {
 	            player = players.get(a);
-	            musicNum = a+1;
+	            musicName = a+1;
 	            player.play();
 	        } catch (Exception e) {
 	            System.out.println(e);

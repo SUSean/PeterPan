@@ -111,7 +111,7 @@ public class Character extends PApplet {
 	
 	public void levelUpAnimation(){
 		
-		if(y>bgheight/2)y-=1;
+		if(y<bgheight-320)y+=5;
 		if(x+w/2<bgwidth/2)x+=5;
 		if(x+w/2>bgwidth/2)x-=5;
 		this.parent.image(images[chosenCharacter+frame], x, y, w, h);

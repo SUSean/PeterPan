@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 /game/
 /res/
+=======
+/res/
+/game/
+/model/
+>>>>>>> FETCH_HEAD
 /server/

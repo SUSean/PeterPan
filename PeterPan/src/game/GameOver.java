@@ -1,5 +1,7 @@
 package game;
 
+import org.json.JSONException;
+
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
@@ -7,8 +9,7 @@ import server.Client;
 
 public class GameOver extends PApplet{
 	PImage background, textGameOver, playAgain, exit;
-	String[] topTenName;
-	int[] topTenScore;
+	private String[] topTenName;
 	private Client client;
 	private boolean rightButton;
 	private int isTopTenPlayer;
@@ -38,12 +39,15 @@ public class GameOver extends PApplet{
 		this.exit = loadImage(this.getClass().getResource("/res/Shop/exit_button.png").getPath());
 		
 		//set topTenName 
-		topTenName = new String[11];	
+		topTenName = new String[11];
+		isTopTenPlayer = 0 ;
 		for(int i=1;i<11;i++){
 			topTenName[i]=this.client.topTen[i-1];
+			String[] string = topTenName[i].split(" ");
+			if(string[0].equals(this.client.name))
+				isTopTenPlayer = i;
 		}
-		//set topTenScore
-		//topTenScore = new int[11];
+		
 
 	}
 	public void setup(){
@@ -57,9 +61,6 @@ public class GameOver extends PApplet{
 		}
 		else
 			image(this.textGameOver, 40, 20);
-		
-		
-		isTopTenPlayer = 1;
 		
 		//list top ten score
 		for (int i=1; i < 11; i++){
@@ -88,7 +89,12 @@ public class GameOver extends PApplet{
 			image(this.exit, width/10*6, 595, 90, 90);
 			tint(225);
 			if(keyPressed&&key==ENTER){
-				game.exitGame();
+				try {
+					game.exitGame();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		else{

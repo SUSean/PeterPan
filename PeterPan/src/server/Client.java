@@ -108,19 +108,19 @@ public class Client {
 		sendMessage(messageString);
 		
 	}
-	public void sendNewScore(int score) throws JSONException {
+	public void sendNewScore() throws JSONException {
 		JSONObject message = new JSONObject();
 		message.put("Type", "Score");
 		message.put("UserName", name);
-		message.put("Score", score);
+		message.put("Score", this.highScore);
 		String messageString = message.toString();
 		sendMessage(messageString);
 	}
-	public void sendNewCoin(int coin) throws JSONException {
+	public void sendNewCoin() throws JSONException {
 		JSONObject message = new JSONObject();
 		message.put("Type", "Coin");
 		message.put("UserName", name);
-		message.put("Coin", coin);
+		message.put("Coin", this.coin);
 		String messageString = message.toString();
 		sendMessage(messageString);
 	}
@@ -136,6 +136,12 @@ public class Client {
 	public void sendOver() throws JSONException {
 		JSONObject message = new JSONObject();
 		message.put("Type", "Over");
+		String messageString = message.toString();
+		sendMessage(messageString);
+	}
+	public void sendGameOver() throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "GameOver");
 		String messageString = message.toString();
 		sendMessage(messageString);
 	}
