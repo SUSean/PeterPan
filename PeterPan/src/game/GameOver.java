@@ -1,6 +1,7 @@
 package game;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PImage;
 import server.Client;
 
@@ -12,10 +13,16 @@ public class GameOver extends PApplet{
 	private boolean rightButton;
 	private int isTopTenPlayer;
 	private Game game;
+	private boolean isWin;
+	private PImage winImage;
 
 	public GameOver(Client client,Game game){
 		this.game=game;
 		this.client=client;
+		
+		//load win image
+		winImage = new PImage();
+		this.winImage = loadImage(this.getClass().getResource("/res/Shop/Win-image.png").getPath());
 		//load background
 		background = new PImage();
 		this.background = loadImage(this.getClass().getResource("/res/Background/background_1.jpg").getPath());
@@ -44,9 +51,12 @@ public class GameOver extends PApplet{
 	}
 	public void draw(){
 		
-		//set background and "Game Over" text images
-		image(this.background, 0, 0);
-		image(this.textGameOver, 40, 20);
+		//set background and "Game Over" & "win"
+		if(isWin){
+			image(this.winImage, 150, 0, 200, 100);
+		}
+		else
+			image(this.textGameOver, 40, 20);
 		
 		
 		isTopTenPlayer = 1;
