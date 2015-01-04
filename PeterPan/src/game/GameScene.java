@@ -97,7 +97,7 @@ public class GameScene extends PApplet{
 		
 	}
 	
-	//called by Game to set topBarDelegate to topBar of the game
+	//called by Game to  topBarDelegate to topBar of the game
 	public void setTopBarDelegate(TopBarDelegate d){
 		this.topBarDelegate=d;
 	}
@@ -141,7 +141,10 @@ public class GameScene extends PApplet{
 				
 				topBarDelegate.setScore(this.score);
 				topBarDelegate.setLevel(this.level);
-				
+				if(this.score<(this.client.highScore))
+					topBarDelegate.setHighestScore(this.client.highScore);
+				else
+					topBarDelegate.setHighestScore(this.score);
 				for(Stars stars : this.stars){
 					for(int i=0;i<level;i++)stars.display();
 				}

@@ -101,7 +101,6 @@ public class Game extends JFrame{
 		this.gameScene.init();
 		this.gameScene.start();
 		this.gameScene.setTopBarDelegate(topBar);
-		this.topBar.setHighestScore(this.client.highScore);
 		this.gameStart.destroy();
 		this.remove(chooseCharacter);
 		chooseCharacter.stop();
