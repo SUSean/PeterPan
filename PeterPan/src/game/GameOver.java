@@ -56,7 +56,7 @@ public class GameOver extends PApplet{
 	}
 	public void draw(){
 		//set background and "Game Over" & "win"
-		if(!isWin){
+		if(isWin){
 			tint(160);
 			image(this.winBackground, 0, 0);
 			tint(255);

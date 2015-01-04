@@ -155,8 +155,8 @@ public class GameScene extends PApplet{
 					this.score++;
 				}
 				
-				
-		}else{																//tunnel Mode
+		}else{	//tunnel Mode
+			
 			if(tunnelModeStart){
 				this.character.moveToTunnelStartMode();
 				if(++messageShowTime==100){
@@ -284,6 +284,7 @@ public class GameScene extends PApplet{
 			tunnel.display();
 	}
 	public void nextLevel() throws JSONException{
+		earnCoin+=level;
 		level++;
 		tunnelMode=false;
 		tunnelModeStart=true;
@@ -300,7 +301,7 @@ public class GameScene extends PApplet{
 		if(level==11){
 			try {
 				this.parentFrame.winFlag=true;
-			parentFrame.gameOver();
+				parentFrame.gameOver();
 			} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

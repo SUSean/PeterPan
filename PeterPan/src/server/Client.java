@@ -124,6 +124,14 @@ public class Client {
 		String messageString = message.toString();
 		sendMessage(messageString);
 	}
+	public void sendNewCharacter(int Character) throws JSONException {
+		JSONObject message = new JSONObject();
+		message.put("Type", "Character");
+		message.put("UserName", name);
+		message.put("Character", Character);
+		String messageString = message.toString();
+		sendMessage(messageString);
+	}
 	public void sendSong(String feel, int musicNum) throws JSONException {
 		JSONObject message = new JSONObject();
 		message.put("Type", "List");
@@ -207,6 +215,7 @@ public class Client {
 		Client client = new Client();
 		client.setIPAddress("127.0.0.1").setPort(8000).connect();
 	}
+
 	
 
 }

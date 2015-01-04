@@ -85,6 +85,9 @@ public class Server {
 						else if(type.equals("Coin")){
 							receiveNewCoin(message.getString("UserName"),message.getInt("Coin"));
 						}
+						else if(type.equals("Character")){
+							receiveNewCharacter(message.getString("UserName"),message.getInt("Character"));
+						}
 						else if(type.equals("Over")){
 							sendTopTen(this,data.getTopTen());
 						}
@@ -130,6 +133,7 @@ public class Server {
 		String messageString = message.toString();
 		sendMessageTo(connThread,messageString);
 	}
+
 	private void sendCorrect(ConnectionThread connThread,String name) throws JSONException, IOException {
 		newFile(name);
 		JSONObject message = new JSONObject();
@@ -200,6 +204,9 @@ public class Server {
 	}
 	public void receiveNewCoin(String name, int coin) {
 		data.users.get(name).addCoin(Integer.toString(coin));
+	}
+	public void receiveNewCharacter(String name, int character) {
+		data.users.get(name).addCharacter(character,"true");
 	}
 	private void sendMessageTo(ConnectionThread client,String message) {
 		client.sendMessage(message);

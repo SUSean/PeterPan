@@ -60,14 +60,14 @@ public class GameLogIn extends JFrame{
 		
 		//the "User Name" label
 		nameLabel = new JLabel("User Name:");
-		nameLabel.setFont(new Font("標楷�?", Font.BOLD, 20));
+		nameLabel.setFont(new Font("璅扑嚙�?", Font.BOLD, 20));
 		nameLabel.setForeground(Color.yellow);
 		nameLabel.setOpaque(false);
 		nameLabel.setBounds(75, 80, 150, 50);
 		
 		//the "Password" label
 		passwordLabel = new JLabel("Password:");
-		passwordLabel.setFont(new Font("標楷�?", Font.BOLD, 20));
+		passwordLabel.setFont(new Font("璅扑嚙�?", Font.BOLD, 20));
 		passwordLabel.setForeground(Color.yellow);
 		passwordLabel.setOpaque(false);
 		passwordLabel.setBounds(75, 130, 150, 50);
@@ -187,6 +187,6 @@ public class GameLogIn extends JFrame{
 		JOptionPane.showOptionDialog(this,error,"warning",
 									JOptionPane.OK_CANCEL_OPTION,
 									JOptionPane.QUESTION_MESSAGE,
-									null,option, option);
+									null,option, option[0]);
 	}
 }

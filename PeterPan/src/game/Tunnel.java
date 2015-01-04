@@ -28,10 +28,6 @@ public class Tunnel {
 	}
 	public void display(){
 		this.y+=1;
-		if(y==gamescene.displayHeight){
-			y=0;
-			gamescene.tunnelMode=false;
-		}
 		this.parent.fill(this.color[0], this.color[1], this.color[2]);
 		this.parent.stroke(this.color[0], this.color[1], this.color[2]);
 		this.parent.rect(x,y,w,h);

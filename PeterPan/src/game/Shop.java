@@ -1,5 +1,9 @@
 package game;
 
+import javax.swing.JOptionPane;
+
+import org.json.JSONException;
+
 import model.Model;
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -19,13 +23,10 @@ public class Shop extends PApplet{
 	private boolean isAllCharacterBought = true;
 	private Client client;
 	private PImage moneyIcon;
-	private int money;
-	
-	
+	private int[] cost={0,0,100,150,200,250,300,350,400,450,500};
 	public Shop(Game game,Client client, Model model){
 		this.game=game;
 		this.client=client;
-		this.money=this.client.coin;
 		//load moneyIcon
 		moneyIcon = new PImage();
 		this.moneyIcon = loadImage(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
@@ -98,14 +99,23 @@ public class Shop extends PApplet{
 		}
 		
 		//listen key to change character selected
-		if(wantToGoBack()&&keyPressed&&key==ENTER){
-			game.shopGotoGameStart();
+		if(keyPressed&&key==ENTER){
+			if(wantToGoBack())
+				game.shopGotoGameStart();
+			else{
+				try {
+					buy(nowWhichCharacterChosed);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		else if (keyPressed && keyCode == UP){
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				temp--;
-				if(temp==0)
+				if(temp<=0)
 					temp=11;
 				if(boughtCharacter[temp]==false){
 					nowWhichCharacterChosed=temp;
@@ -118,7 +128,7 @@ public class Shop extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				temp++;
-				if(temp==12)
+				if(temp>=12)
 					temp=1;
 				if(boughtCharacter[temp]==false){
 					nowWhichCharacterChosed=temp;
@@ -131,11 +141,15 @@ public class Shop extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				if(temp==4)
+					temp=9;
+				else if(temp==1)
+					temp=10;
+				else if(temp==2)
 					temp=11;
-				else if(temp==11)
+				else if(temp==3)
 					temp=8;
 				else
-					temp=(temp+8)%12;
+					temp-=4;;
 				if(boughtCharacter[temp]==false){
 					nowWhichCharacterChosed=temp;
 					break;
@@ -148,11 +162,15 @@ public class Shop extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				if(temp==8)
-					temp=11;
+					temp=1;
+				else if(temp==9)
+					temp=2;
+				else if(temp==10)
+					temp=3;
 				else if(temp==11)
 					temp=4;
 				else
-					temp=(temp+4)%12;
+					temp+=4;
 				if(boughtCharacter[temp]==false){
 					nowWhichCharacterChosed=temp;
 					break;
@@ -160,15 +178,18 @@ public class Shop extends PApplet{
 			}
 			
 		}
-		else if (!wantToGoBack()&&keyPressed && keyCode == ENTER){
-			this.client.setCharacter(nowWhichCharacterChosed,true);
-		}
+		
 		
 		for(int i=1;i<11;i++){
 			if (boughtCharacter[i] == true)
 				tint(120);
-			else 
+			else{
+				textSize(20);
+				fill(255, 255, 0);
+				text(cost[i], width/13*(1+((i-1)/4)*4)+100, height/15+150*((i%4+3)%4)+140);
 				tint(0);
+			}
+				
 			if (nowWhichCharacterChosed == i)
 				tint(255);
 			image(characters[i], width/13*(1+((i-1)/4)*4), height/15+150*((i%4+3)%4), 100, 150);
@@ -181,15 +202,18 @@ public class Shop extends PApplet{
 		}
 		else{
 			tint(255);
-			image(mayIHelpYou, width/13*8, height/15*9, 150, 100);
+			image(mayIHelpYou, width/13*9, height/15*9, 150, 100);
 		}
 		tint(255);
 		
 		//text "~Shop~"
 		fill(255, 255, 0);
-		text("~Shop~", 40, 35);
-		text("Money:"+money, 230, 35);
 		textSize(40);
+		text("~Shop~", 40, 35);
+		image(this.moneyIcon, 200, 0, 60, 60);
+		textSize(30);
+		text("Money:"+this.client.coin, 260, 35);
+		
 
 	}
 	public int getBoughtCharacter(){
@@ -201,5 +225,32 @@ public class Shop extends PApplet{
 			return true;
 		}
 		else return false;
+	}
+	public void buy(int now) throws JSONException {
+		String[] option = {"Yes","No"};
+		int n=JOptionPane.showOptionDialog(this,"Do you want to buy this character","BUY",
+									JOptionPane.OK_CANCEL_OPTION,
+									JOptionPane.QUESTION_MESSAGE,
+									null,option, option[0]);
+		if(n==0){
+			if(this.client.coin>=cost[nowWhichCharacterChosed]){
+				this.client.coin-=cost[nowWhichCharacterChosed];
+				this.client.setCharacter(nowWhichCharacterChosed-1,true);
+				boughtCharacter[nowWhichCharacterChosed]=this.client.haveCharacterFlag[nowWhichCharacterChosed-1];
+				this.client.sendNewCharacter(nowWhichCharacterChosed-1);
+				this.client.sendNewCoin();
+			}
+			else
+				error("Not enough coin");
+		}
+		else 
+			return;
+	}
+	public void error(String error) {
+		String[] option = {"OK"};
+		JOptionPane.showOptionDialog(this,error,"warning",
+									JOptionPane.OK_CANCEL_OPTION,
+									JOptionPane.QUESTION_MESSAGE,
+									null,option, option[0]);
 	}
 }

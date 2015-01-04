@@ -31,7 +31,7 @@ public class Game extends JFrame{
 	 * Constructor of a game 
 	 */
 	public Game(Client client){
-		super("Tappy Plane");
+		super("Peter Pan");
 		this.client=client;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(bounds);

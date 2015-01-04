@@ -9,7 +9,7 @@ import processing.core.PImage;
 import server.Client;
 
 public class GameStart extends PApplet{
-	PImage background, moneyIcon;
+	PImage background, moneyIcon,highestScoreIcon;
 	PImage play;
 	PImage buy;
 	private Game game;
@@ -20,6 +20,8 @@ public class GameStart extends PApplet{
 		//load moneyIcon
 		moneyIcon = new PImage();
 		this.moneyIcon = loadImage(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
+		highestScoreIcon = new PImage();
+		this.highestScoreIcon = loadImage(this.getClass().getResource("/res/Shop/HighestScore.png").getPath());
 		//load background image
 		background = new PImage();
 		this.background = loadImage(this.getClass().getResource("/res/Background/logInBackground.jpg").getPath());
@@ -34,7 +36,7 @@ public class GameStart extends PApplet{
 	public void draw(){
 		background(255, 255, 255);
 		image(this.background, -200, -700, this.background.width, this.background.height);
-		image(this.moneyIcon, 60, 20, 70, 70);
+		
 		
 		if (keyPressed && keyCode == UP){//if press UP, then go to "Game Start" choice mode
 			isBuy = false;
@@ -45,9 +47,13 @@ public class GameStart extends PApplet{
 		
 		//set username text and money text
 		fill(0, 255, 0);
-		textSize(50);
-		textAlign(LEFT);
-		text("Money:"+money, 150, 80);
+		textSize(40);
+		text(this.client.name, 40, 40);
+		textSize(30);
+		image(this.moneyIcon, 20, 50, 50, 50);
+		text("Money :\n"+money, 70, 75);
+		image(this.highestScoreIcon,width/2,50, 50, 50);
+		text("High Score :\n"+this.client.highScore,width/2+50,75);
 		noFill();
 		
 		if (isBuy == false){

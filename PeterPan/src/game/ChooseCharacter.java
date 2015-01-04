@@ -16,16 +16,15 @@ public class ChooseCharacter extends PApplet{
 	private Game game;
 	private Client client;
 	private String userName;
-	private int money ;
-	
+	private PImage highestScoreIcon;
 	public ChooseCharacter(Game game,Client client, Model model){
 		//load background
 		this.client=client;
 		background = new PImage();
 		this.background = loadImage(this.getClass().getResource("/res/Shop/grass.jpg").getPath());
-		
+		highestScoreIcon = new PImage();
+		this.highestScoreIcon = loadImage(this.getClass().getResource("/res/Shop/HighestScore.png").getPath());
 		this.game=game;
-		this.money=this.client.coin;
 		this.userName=this.client.name;
 		//load characters' image & go_back_sign image
 		this.characterNum=model.getCharatorNum();
@@ -61,7 +60,7 @@ public class ChooseCharacter extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				temp--;
-				if(temp==0)
+				if(temp<=0)
 					temp=11;
 				if(boughtCharacter[temp]==true){
 					nowWhichCharacterChosed=temp;
@@ -74,7 +73,7 @@ public class ChooseCharacter extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				temp++;
-				if(temp==12)
+				if(temp>=12)
 					temp=1;
 				if(boughtCharacter[temp]==true){
 					nowWhichCharacterChosed=temp;
@@ -87,11 +86,17 @@ public class ChooseCharacter extends PApplet{
 			int temp = nowWhichCharacterChosed;
 			while(true){
 				if(temp==4)
+					temp=9;
+				else if(temp==1)
+					temp=10;
+				else if(temp==2)
+					temp=7;
+				else if(temp==3)
 					temp=11;
 				else if(temp==11)
 					temp=8;
 				else
-					temp=(temp+8)%12;
+					temp-=4;;
 				if(boughtCharacter[temp]==true){
 					nowWhichCharacterChosed=temp;
 					break;
@@ -103,10 +108,16 @@ public class ChooseCharacter extends PApplet{
 			while(true){
 				if(temp==8)
 					temp=11;
-				else if(temp==11)
+				else if(temp==7)
 					temp=4;
+				else if(temp==9)
+					temp=2;
+				else if(temp==10)
+					temp=3;
+				else if(temp==11)
+					temp=1;
 				else
-					temp=(temp+4)%12;
+					temp+=4;
 				if(boughtCharacter[temp]==true){
 					nowWhichCharacterChosed=temp;
 					break;
@@ -149,12 +160,15 @@ public class ChooseCharacter extends PApplet{
 
 		//text "~Your Character~"
 		fill(255, 100, 0);
-		text("~Your Characters~", 60, 40);
-		//text username
-		text(userName, width/13*9, height/15*9);
-		//text money
-		text("Money\n"+money, width/13*9, height/15*10);
 		textSize(40);
+		text("~Your Characters~", 60, 40);
+		
+		fill(255, 100, 255);
+		textSize(35);
+		text(this.userName, width/13*9, height/15*9);
+		textSize(25);
+		text("High Score :\n"+this.client.highScore, width/13*9, height/15*10);
+		image(this.highestScoreIcon,width/13*7+20, height/15*10-20, 60, 60);
 	}
 	public int getChoseWhichCharacter(){
 		//if return 11 means want to go back 
