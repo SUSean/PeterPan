@@ -8,14 +8,13 @@ import processing.core.PImage;
 import server.Client;
 
 public class GameOver extends PApplet{
-	PImage background, textGameOver, playAgain, exit;
+	private PImage background, textGameOver, playAgain, exit, winBackground, winImage;
 	private String[] topTenName;
 	private Client client;
 	private boolean rightButton;
 	private int isTopTenPlayer;
 	private Game game;
 	private boolean isWin;
-	private PImage winImage;
 
 	public GameOver(Client client,Game game){
 		this.game=game;
@@ -24,10 +23,12 @@ public class GameOver extends PApplet{
 		//load win image
 		winImage = new PImage();
 		this.winImage = loadImage(this.getClass().getResource("/res/Shop/Win-image.png").getPath());
+		//load win background
+		winBackground = new PImage();
+		this.winBackground = loadImage(this.getClass().getResource("/res/Background/winBackground.jpg").getPath());
 		//load background
 		background = new PImage();
 		this.background = loadImage(this.getClass().getResource("/res/Background/background_1.jpg").getPath());
-	
 		//load "Game Over" text
 		textGameOver = new PImage();
 		this.textGameOver = loadImage(this.getClass().getResource("/res/Shop/textGameOver.png").getPath());
@@ -54,13 +55,17 @@ public class GameOver extends PApplet{
 		size(500, 700);
 	}
 	public void draw(){
-		image(this.background, 0, 0);
 		//set background and "Game Over" & "win"
-		if(isWin){
+		if(!isWin){
+			tint(160);
+			image(this.winBackground, 0, 0);
+			tint(255);
 			image(this.winImage, 150, 0, 200, 100);
 		}
-		else
+		else{
+			image(this.background, 0, 0);
 			image(this.textGameOver, 40, 20);
+		}
 		
 		//list top ten score
 		for (int i=1; i < 11; i++){
