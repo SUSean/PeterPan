@@ -12,7 +12,7 @@ public class ScoreBar extends JPanel implements ScoreBarDelegate{
 	private int currentScore;
 	
 	public ScoreBar(){
-		this.setBounds(0,635,500,15);
+		this.setBounds(0,50,500,8);
 		this.setBackground(Color.black);
 		this.setOpaque(true);
 		this.setLayout(null);
@@ -39,10 +39,6 @@ public class ScoreBar extends JPanel implements ScoreBarDelegate{
 		else if (this.currentScore > this.fullScore*3/4){
 			this.Score.setBackground(Color.green);
 		}
-	}
-	//adjust the length of the progress bar
-	public void plusScore(){
-		
 	}
 	
 	public void setFullScore(int full){

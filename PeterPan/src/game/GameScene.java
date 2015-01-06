@@ -52,6 +52,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	public int score=0;
 	private int nowScore;
 	public int earnCoin=0;
+	public int targetScore=5;
 	private Client client;
 	private int hitNumber,t;
 	/**
@@ -100,7 +101,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 		this.tunnels[1]=new Tunnel(this,this,"normal",170,-1);
 		this.tunnels[2]=new Tunnel(this,this,"sad",340,-1);
 		nowScore=0;
-		scoreBarDelegate.setFullScore(50);
+		scoreBarDelegate.setFullScore(targetScore);
 	}
 	
 	//called by Game to  topBarDelegate to topBar of the game
@@ -117,7 +118,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 			
 				if(time++==500){
 					time=0;
-					if(nowScore<50){
+					if(nowScore<targetScore){
 						try {
 							parentFrame.gameOver();
 						} catch (JSONException e) {
@@ -154,7 +155,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 				
 				topBarDelegate.setScore(this.score);
 				topBarDelegate.setLevel(this.level);
-				scoreBarDelegate.setCurrentScore(this.score);
+				scoreBarDelegate.setCurrentScore(this.nowScore);
 				if(this.score<(this.client.highScore))
 					topBarDelegate.setHighestScore(this.client.highScore);
 				else
@@ -315,7 +316,8 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 		tunnelMode=false;
 		tunnelModeStart=true;
 		tunnelModeEnd=false;
-		scoreBarDelegate.setFullScore(50);
+		this.nowScore=0;
+		scoreBarDelegate.setFullScore(targetScore);
 		this.clouds.removeAll(clouds);
 		makeClouds();
 		this.stars.removeAll(stars);
