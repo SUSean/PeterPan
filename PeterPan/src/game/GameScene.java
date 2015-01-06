@@ -46,7 +46,9 @@ public class GameScene extends PApplet{
 	private PVector characterVector;
 	private PVector starVector;
 	private TopBarDelegate topBarDelegate;
+	private ScoreBarDelegate scoreBarDelegate;
 	public int score=0;
+	private int targetScore;
 	public int earnCoin=0;
 	private Client client;
 	private int hitNumber,t;
@@ -94,20 +96,24 @@ public class GameScene extends PApplet{
 		this.tunnels[0]=new Tunnel(this,this,"happy",0,-1);
 		this.tunnels[1]=new Tunnel(this,this,"normal",170,-1);
 		this.tunnels[2]=new Tunnel(this,this,"sad",340,-1);
-		
+		targetScore=(level*level)*2;
+		scoreBarDelegate.setFullScore(targetScore);
 	}
 	
 	//called by Game to  topBarDelegate to topBar of the game
 	public void setTopBarDelegate(TopBarDelegate d){
 		this.topBarDelegate=d;
 	}
+	public void setScoreBarDelegate(ScoreBarDelegate d){
+		this.scoreBarDelegate=d;
+	}
 	public void draw(){
 		background(255, 255, 255);
 		if(!tunnelMode){
-				
+			
 				if(time++==500){
 					time=0;
-					if(score<(level*level)*2){
+					if(score<targetScore){
 						try {
 							parentFrame.gameOver();
 						} catch (JSONException e) {
@@ -141,6 +147,7 @@ public class GameScene extends PApplet{
 				
 				topBarDelegate.setScore(this.score);
 				topBarDelegate.setLevel(this.level);
+				scoreBarDelegate.setCurrentScore(this.score);
 				if(this.score<(this.client.highScore))
 					topBarDelegate.setHighestScore(this.client.highScore);
 				else
@@ -180,7 +187,7 @@ public class GameScene extends PApplet{
 				}
 				image(this.tunnelBackgroundImg, 0, t++/5+700-this.tunnelBackgroundImg.height, this.tunnelBackgroundImg.width, this.tunnelBackgroundImg.height);
 				for(Cloud cloud : this.clouds)
-					for(int i=0;i<level;i++)cloud.display();
+					cloud.display();
 				this.character.levelUpAnimation();
 			}
 			else{
@@ -289,9 +296,11 @@ public class GameScene extends PApplet{
 	public void nextLevel() throws JSONException{
 		earnCoin+=level;
 		level++;
+		targetScore=(level*level)*2;
 		tunnelMode=false;
 		tunnelModeStart=true;
 		tunnelModeEnd=false;
+		scoreBarDelegate.setFullScore(targetScore);
 		this.clouds.removeAll(clouds);
 		makeClouds();
 		this.stars.removeAll(stars);
@@ -352,6 +361,7 @@ public class GameScene extends PApplet{
 			this.tunnels[0].tunnelColorRecover();
 		}
 	}
+	
 	@SuppressWarnings("deprecation")
 	public void exit(){
 		this.music.musicStop();
