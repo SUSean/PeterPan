@@ -54,7 +54,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	private int currentCoin=0;
 	private int nowScore;
 	private int earnCoin=0;
-	private int targetScore=5;
+	private int targetScore=50;
 	private Client client;
 	private int hitNumber,t;
 	/**
@@ -125,7 +125,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 
 		if(!tunnelMode){
 			
-				if(time++==500){
+				if(time++==2500){
 					time=0;
 					if(nowScore<targetScore){
 						try {
@@ -136,6 +136,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 						}
 					}else{
 						tunnelMode=true;
+						keyLock=false;
 					}
 				}
 				
