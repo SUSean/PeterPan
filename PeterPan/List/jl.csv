@@ -1,3 +1,9 @@
+<<<<<<< Updated upstream
 normal;music_9;music_1
 happy;music_2
 sad;music_10;music_2;music_7
+=======
+normal;music_9;music_2;music_1;music_10;music_3;music_5;music_8;music_6;music_7
+happy;music_2;music_7
+sad;music_10;music_2;music_4;music_7;music_5;music_3
+>>>>>>> Stashed changes

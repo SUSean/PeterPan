@@ -216,6 +216,5 @@ public class Client {
 		client.setIPAddress("127.0.0.1").setPort(8000).connect();
 	}
 
-	
 
 }
