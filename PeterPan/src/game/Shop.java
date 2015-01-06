@@ -1,5 +1,10 @@
 package game;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import org.json.JSONException;
@@ -10,7 +15,7 @@ import processing.core.PFont;
 import processing.core.PImage;
 import server.Client;
 
-public class Shop extends PApplet{
+public class Shop extends PApplet implements KeyListener{
 	private PImage[] shopKeepers;
 	private PImage[] characters;
 	private PImage background;
@@ -65,7 +70,7 @@ public class Shop extends PApplet{
 		for(int i=1;i<11;i++){
 			boughtCharacter[i]=this.client.haveCharacterFlag[i-1];
 		}
-
+		this.addKeyListener(this);
 	}
 	public void setup(){
 		size(500, 700);
@@ -99,7 +104,7 @@ public class Shop extends PApplet{
 		}
 		
 		//listen key to change character selected
-		if(keyPressed&&key==ENTER){
+/*		if(keyPressed&&key==ENTER){
 			if(wantToGoBack())
 				game.shopGotoGameStart();
 			else{
@@ -176,10 +181,9 @@ public class Shop extends PApplet{
 					break;
 				}
 			}
-			
-		}
+		}*/
 		
-		
+	        
 		for(int i=1;i<11;i++){
 			if (boughtCharacter[i] == true)
 				tint(120);
@@ -253,4 +257,88 @@ public class Shop extends PApplet{
 									JOptionPane.QUESTION_MESSAGE,
 									null,option, option[0]);
 	}
+	public void keyPressed(KeyEvent evt)
+    {
+    	if(evt.getKeyCode() == evt.VK_ENTER)
+    	{
+    		if(wantToGoBack())
+				game.shopGotoGameStart();
+			else{
+				try {
+					buy(nowWhichCharacterChosed);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+    	}
+    	else if(evt.getKeyCode() == KeyEvent.VK_LEFT)
+        {
+        	int temp = nowWhichCharacterChosed;
+			while(true){
+				if(temp==4)
+					temp=9;
+				else if(temp==1)
+					temp=10;
+				else if(temp==2)
+					temp=11;
+				else if(temp==3)
+					temp=8;
+				else
+					temp-=4;;
+				if(boughtCharacter[temp]==false){
+					nowWhichCharacterChosed=temp;
+					break;
+				}
+			}
+        }
+        else if (evt.getKeyCode() == KeyEvent.VK_RIGHT)
+        {
+        	int temp = nowWhichCharacterChosed;
+			while(true){
+				if(temp==8)
+					temp=1;
+				else if(temp==9)
+					temp=2;
+				else if(temp==10)
+					temp=3;
+				else if(temp==11)
+					temp=4;
+				else
+					temp+=4;
+				if(boughtCharacter[temp]==false){
+					nowWhichCharacterChosed=temp;
+					break;
+				}
+			}
+        }
+        else if (evt.getKeyCode() == KeyEvent.VK_DOWN)
+        {
+        	int temp = nowWhichCharacterChosed;
+			while(true){
+				temp++;
+				if(temp>=12)
+					temp=1;
+				if(boughtCharacter[temp]==false){
+					nowWhichCharacterChosed=temp;
+					break;
+				}
+					
+			}
+        }
+        else if (evt.getKeyCode() == KeyEvent.VK_UP)
+        {
+        	int temp = nowWhichCharacterChosed;
+			while(true){
+				temp--;
+				if(temp<=0)
+					temp=11;
+				if(boughtCharacter[temp]==false){
+					nowWhichCharacterChosed=temp;
+					break;
+				}
+					
+			}
+        }
+    }
 }
