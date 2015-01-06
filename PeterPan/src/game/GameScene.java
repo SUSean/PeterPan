@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,6 +19,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 import server.Client;
+import server.User;
 
 public class GameScene extends PApplet /*implements KeyListener*/{
 	
@@ -54,9 +56,11 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	private int currentCoin=0;
 	private int nowScore;
 	private int earnCoin=0;
-	private int targetScore=50;
+	private int targetScore=5;
 	private Client client;
 	private int hitNumber,t;
+	private Random random = new Random();
+	public HashMap<Integer,String[]> feels=new HashMap<Integer,String[]>();
 	/**
 	 * Constructor of a game scene.
 	 * 
@@ -104,11 +108,9 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 		this.coins = new CopyOnWriteArrayList<Coin>();
 		makeClouds();
 		makeCoins();
-		this.tunnels=new Tunnel[tunnelNum];
-
-		this.tunnels[0]=new Tunnel(this,this,"happy",0,-1);
-		this.tunnels[1]=new Tunnel(this,this,"normal",170,-1);
-		this.tunnels[2]=new Tunnel(this,this,"sad",340,-1);
+		feels.put(0,new String[]{"happy","normal","sad"});
+		feels.put(1,new String[]{"morning","noon","night"});
+		feels.put(2,new String[]{"rainy","cloudy","sunny"});
 		nowScore=0;
 		scoreBarDelegate.setFullScore(targetScore);
 	}
@@ -125,7 +127,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 
 		if(!tunnelMode){
 			
-				if(time++==2500){
+				if(time++==500){
 					time=0;
 					if(nowScore<targetScore){
 						try {
@@ -137,6 +139,11 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 					}else{
 						tunnelMode=true;
 						keyLock=false;
+						this.tunnels=new Tunnel[tunnelNum];
+						System.out.println(a);
+						this.tunnels[0]=new Tunnel(this,this,feels.get(a)[0],0,-1);
+						this.tunnels[1]=new Tunnel(this,this,feels.get(a)[1],170,-1);
+						this.tunnels[2]=new Tunnel(this,this,feels.get(a)[2],340,-1);
 					}
 				}
 				
