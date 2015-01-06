@@ -29,6 +29,15 @@ public class ScoreBar extends JPanel {
 	//adjust the length of the progress bar
 	public void plusScore(){
 		this.Score.setBounds(0, 0, (int)(this.Score.getWidth()*this.currentScore/this.fullScore), this.Score.getHeight());
+		if (this.currentScore < this.fullScore/4){
+			this.Score.setBackground(Color.red);
+		}
+		else if (this.currentScore >= this.fullScore/2 && this.currentScore <= this.fullScore*3/4){
+			this.Score.setBackground(Color.yellow);
+		}
+		else if (this.currentScore > this.fullScore*3/4){
+			this.Score.setBackground(Color.green);
+		}
 	}
 	
 	//reset the progressBar to 0
