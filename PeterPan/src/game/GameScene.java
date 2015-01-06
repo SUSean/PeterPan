@@ -381,23 +381,4 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 		this.music.musicStop();
 		this.music.stop();
 	}
-/*
-	public void keyPressed(KeyEvent evt){
-		if (tunnelMode){
-			if (evt.getKeyCode() == KeyEvent.VK_LEFT){
-				this.character.setMovement(Character.LEFT);
-			}
-			else if (evt.getKeyCode() == KeyEvent.VK_RIGHT){
-				this.character.setMovement(Character.RIGHT);
-			}
-			else if (evt.getKeyCode() == KeyEvent.VK_UP){
-				this.character.setMovement(Character.UP);
-			}
-			else{
-				this.character.setMovement(Character.STAY);
-				this.character.tunnelModeDisplay();
-			}
-		}
-	}
-	*/
 }

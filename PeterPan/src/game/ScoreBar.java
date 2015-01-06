@@ -11,13 +11,8 @@ public class ScoreBar extends JPanel implements ScoreBarDelegate{
 	private int fullScore;//get what score will enter another level
 	private int currentScore;
 	
-<<<<<<< HEAD
 	public ScoreBar(){
 		this.setBounds(0,635,500,30);
-=======
-	public ScoreBar(int fullScore, int currentScore){
-		this.setBounds(0,50,500,15);
->>>>>>> c06017f27696032e2ac587eb001a34571cf142ab
 		this.setBackground(Color.black);
 		this.setOpaque(true);
 		this.setLayout(null);
@@ -33,12 +28,12 @@ public class ScoreBar extends JPanel implements ScoreBarDelegate{
 		this.add(Score);
 	}
 	
-<<<<<<< HEAD
+
 	//reset the progressBar to 0
 	public void setCurrentScore(int score){
 		this.currentScore=score;
 		this.Score.setBounds(0, 0, (int)(this.getWidth()*this.currentScore/this.fullScore), this.Score.getHeight());
-=======
+	}
 	//adjust the length of the progress bar
 	public void plusScore(){
 		this.Score.setBounds(0, 0, (int)(this.Score.getWidth()*this.currentScore/this.fullScore), this.Score.getHeight());
@@ -51,7 +46,7 @@ public class ScoreBar extends JPanel implements ScoreBarDelegate{
 		else if (this.currentScore > this.fullScore*3/4){
 			this.Score.setBackground(Color.green);
 		}
->>>>>>> c06017f27696032e2ac587eb001a34571cf142ab
+
 	}
 	
 	public void setFullScore(int full){
