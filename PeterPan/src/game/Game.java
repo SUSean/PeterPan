@@ -121,12 +121,7 @@ public class Game extends JFrame{
 	 * @throws JSONException 
 	 */
 	public void gameOver() throws JSONException {
-		if(this.gameScene.score>this.client.highScore){
-			this.client.highScore=this.gameScene.score;
-			this.client.sendNewScore();
-		}
-		this.client.coin+=this.gameScene.earnCoin;
-		this.client.sendNewCoin();
+
 		this.remove(this.gameScene);
 		gameScene.exit();
 		this.gameScene.destroy();
