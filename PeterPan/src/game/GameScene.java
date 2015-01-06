@@ -36,11 +36,10 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	private int levelUpAnimationTime=0;
 	private int messageShowTime=0;
 	private PImage backgroundImg,starImg,tunnelBackgroundImg,moneyIcon;
-	public PImage[] characters,cloudImg,coinImg;
+	public PImage[] characters,cloudImg;
 	private Tunnel[] tunnels;
 	private Character character;
 	private List<Stars> stars;
-	private List<Coin> coins;
 	private List<Cloud> clouds;
 	boolean[] keys = new boolean[255];
 	private Game parentFrame;
@@ -49,8 +48,11 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	private PVector characterVector;
 	private PVector starVector;
 	private TopBarDelegate topBarDelegate;
+	private ScoreBarDelegate scoreBarDelegate;
 	public int score=0;
+	private int nowScore;
 	public int earnCoin=0;
+	public int targetScore=5;
 	private Client client;
 	private int hitNumber,t;
 	/**
@@ -71,16 +73,8 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 		this.cloudImg=new PImage[2];
 		this.cloudImg[0] = loadImage(this.getClass().getResource("/res/Background/cloud_1.png").getPath());
 		this.cloudImg[1] = loadImage(this.getClass().getResource("/res/Background/cloud_2.png").getPath());
-		
-		this.coinImg = new PImage[4];
-		this.coinImg[0] = loadImage(this.getClass().getResource("/res/Coin/coins_1.png").getPath());
-		this.coinImg[1] = loadImage(this.getClass().getResource("/res/Coin/coins_2.png").getPath());
-		this.coinImg[2] = loadImage(this.getClass().getResource("/res/Coin/coins_3.png").getPath());
-		this.coinImg[3] = loadImage(this.getClass().getResource("/res/Coin/coins_4.png").getPath());
 		this.requestFocus();
 		this.addKeyListener(this);
-		
-		
 	}
 	
 	public void setup(){
@@ -99,29 +93,32 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 		for(int i=0;i<NUM_OF_STARS;i++)addStar();	
 		
 		this.clouds = new CopyOnWriteArrayList<Cloud>();
-		this.coins = new CopyOnWriteArrayList<Coin>();
 		makeClouds();
-		makeCoins();
+		
 		this.tunnels=new Tunnel[tunnelNum];
 
 		this.tunnels[0]=new Tunnel(this,this,"happy",0,-1);
 		this.tunnels[1]=new Tunnel(this,this,"normal",170,-1);
 		this.tunnels[2]=new Tunnel(this,this,"sad",340,-1);
-		
+		nowScore=0;
+		scoreBarDelegate.setFullScore(targetScore);
 	}
 	
 	//called by Game to  topBarDelegate to topBar of the game
 	public void setTopBarDelegate(TopBarDelegate d){
 		this.topBarDelegate=d;
 	}
+	public void setScoreBarDelegate(ScoreBarDelegate d){
+		this.scoreBarDelegate=d;
+	}
 	public void draw(){
 		background(255, 255, 255);
 
 		if(!tunnelMode){
-				
+			
 				if(time++==500){
 					time=0;
-					if(score<(level*level)*2){
+					if(nowScore<targetScore){
 						try {
 							parentFrame.gameOver();
 						} catch (JSONException e) {
@@ -158,6 +155,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 				
 				topBarDelegate.setScore(this.score);
 				topBarDelegate.setLevel(this.level);
+				scoreBarDelegate.setCurrentScore(this.nowScore);
 				if(this.score<(this.client.highScore))
 					topBarDelegate.setHighestScore(this.client.highScore);
 				else
@@ -173,13 +171,13 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 				
 				if(isHitStars()){
 					this.score++;
+					this.nowScore++;
 				}
 				
 		}else{	//tunnel Mode
 			
 			if(tunnelModeStart){
 				this.character.moveToTunnelStartMode();
-				image(this.moneyIcon, 10, 600, 50, 50);
 				if(++messageShowTime==100){
 					messageShowTime=0;
 					tunnelModeStart=false;
@@ -197,13 +195,8 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 					}
 				}
 				image(this.tunnelBackgroundImg, 0, t++/5+700-this.tunnelBackgroundImg.height, this.tunnelBackgroundImg.width, this.tunnelBackgroundImg.height);
-				image(this.moneyIcon, 10, 600, 50, 50);
 				for(Cloud cloud : this.clouds)
 					cloud.display();
-				for(Coin coin : this.coins){
-					coin.display();
-					if(coin.getY()>600)this.coins.remove(coin);
-				}
 				this.character.levelUpAnimation();
 			}
 			else{
@@ -226,8 +219,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 				}
 				else this.character.setMovement(Character.STAY);
 				this.character.tunnelModeDisplay();
-				
-				
+
 			}
 		}
 		
@@ -273,11 +265,6 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 			this.clouds.add( new Cloud(this, this.cloudImg[n%2], x,-y) );
 		}
 		
-	}
-	private void makeCoins(){
-		for(int i=1;i<=level;i++){
-			this.coins.add(new Coin(this,this.coinImg,500,-i*15));
-		}
 	}
 	private boolean isHitTunnel(){
 		float Y = this.character.getY();
@@ -325,12 +312,13 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 		this.client.coin+=this.earnCoin;
 		this.client.sendNewCoin();
 		level++;
+		nowScore=0;
 		tunnelMode=false;
 		tunnelModeStart=true;
 		tunnelModeEnd=false;
+		this.nowScore=0;
+		scoreBarDelegate.setFullScore(targetScore);
 		this.clouds.removeAll(clouds);
-		this.coins.removeAll(coins);
-		makeCoins();
 		makeClouds();
 		this.stars.removeAll(stars);
 		for(int i=0;i<NUM_OF_STARS;i++)addStar();
@@ -390,28 +378,10 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 			this.tunnels[0].tunnelColorRecover();
 		}
 	}
+	
 	@SuppressWarnings("deprecation")
 	public void exit(){
 		this.music.musicStop();
 		this.music.stop();
 	}
-/*
-	public void keyPressed(KeyEvent evt){
-		if (tunnelMode){
-			if (evt.getKeyCode() == KeyEvent.VK_LEFT){
-				this.character.setMovement(Character.LEFT);
-			}
-			else if (evt.getKeyCode() == KeyEvent.VK_RIGHT){
-				this.character.setMovement(Character.RIGHT);
-			}
-			else if (evt.getKeyCode() == KeyEvent.VK_UP){
-				this.character.setMovement(Character.UP);
-			}
-			else{
-				this.character.setMovement(Character.STAY);
-				this.character.tunnelModeDisplay();
-			}
-		}
-	}
-	*/
 }
