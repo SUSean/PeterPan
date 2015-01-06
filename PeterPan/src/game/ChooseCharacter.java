@@ -189,9 +189,17 @@ public class ChooseCharacter extends PApplet implements KeyListener{
 	}
 	public void keyPressed(KeyEvent evt)
     {
-    	if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+    	if(wantToGoBack()&&evt.getKeyCode() == KeyEvent.VK_ENTER)
     	{
     		game.chooseCharacterGotoGameStart();
+    	}
+    	else if(!wantToGoBack()&&evt.getKeyCode() == KeyEvent.VK_ENTER){
+    		try {
+				game.start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     	else if(evt.getKeyCode() == KeyEvent.VK_LEFT)
         {

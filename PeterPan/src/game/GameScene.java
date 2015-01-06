@@ -1,6 +1,8 @@
 package game;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 import server.Client;
 
-public class GameScene extends PApplet{
+public class GameScene extends PApplet /*implements KeyListener*/{
 	
 	public static final int MARGIN_TOP = 50;
 	public static final int NUM_OF_STARS = 10;
@@ -68,7 +70,7 @@ public class GameScene extends PApplet{
 		this.cloudImg[0] = loadImage(this.getClass().getResource("/res/Background/cloud_1.png").getPath());
 		this.cloudImg[1] = loadImage(this.getClass().getResource("/res/Background/cloud_2.png").getPath());
 		this.requestFocus();
-		
+		this.addKeyListener(this);
 	}
 	
 	public void setup(){
@@ -203,6 +205,7 @@ public class GameScene extends PApplet{
 				}
 				else this.character.setMovement(Character.STAY);
 				this.character.tunnelModeDisplay();
+
 			}
 		}
 		
@@ -357,4 +360,23 @@ public class GameScene extends PApplet{
 		this.music.musicStop();
 		this.music.stop();
 	}
+/*
+	public void keyPressed(KeyEvent evt){
+		if (tunnelMode){
+			if (evt.getKeyCode() == KeyEvent.VK_LEFT){
+				this.character.setMovement(Character.LEFT);
+			}
+			else if (evt.getKeyCode() == KeyEvent.VK_RIGHT){
+				this.character.setMovement(Character.RIGHT);
+			}
+			else if (evt.getKeyCode() == KeyEvent.VK_UP){
+				this.character.setMovement(Character.UP);
+			}
+			else{
+				this.character.setMovement(Character.STAY);
+				this.character.tunnelModeDisplay();
+			}
+		}
+	}
+	*/
 }
