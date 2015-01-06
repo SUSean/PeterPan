@@ -26,6 +26,7 @@ public class Game extends JFrame{
 	private Character character;
 	private Shop shop;
 	private GameOver endPanel;
+	private ScoreBar scoreBar;
 	public boolean winFlag;
 	/**
 	 * Constructor of a game 
@@ -96,16 +97,19 @@ public class Game extends JFrame{
 	public void start() throws IOException{
 		this.winFlag = false;
 		this.topBar = new TopBar(new Rectangle(bounds.width, 50));
-
+		this.scoreBar=new ScoreBar();
+		
 		this.gameScene = new GameScene(this,this.client,this.model);
 		this.gameScene.init();
 		this.gameScene.start();
 		this.gameScene.setTopBarDelegate(topBar);
+		this.gameScene.setScoreBarDelegate(scoreBar);
 		this.gameStart.destroy();
 		this.remove(chooseCharacter);
 		chooseCharacter.stop();
 		chooseCharacter.destroy();
 		this.add(topBar);
+		this.add(scoreBar);
 		this.add(gameScene);
 		
 	}
@@ -121,16 +125,12 @@ public class Game extends JFrame{
 	 * @throws JSONException 
 	 */
 	public void gameOver() throws JSONException {
-		if(this.gameScene.score>this.client.highScore){
-			this.client.highScore=this.gameScene.score;
-			this.client.sendNewScore();
-		}
-		this.client.coin+=this.gameScene.earnCoin;
-		this.client.sendNewCoin();
+
 		this.remove(this.gameScene);
 		gameScene.exit();
 		this.gameScene.destroy();
 		this.remove(topBar);
+		this.remove(scoreBar);
 		this.client.sendOver();
 		this.endPanel=new GameOver(this.client,this);
 		this.endPanel.setIsWin(winFlag);
@@ -149,6 +149,7 @@ public class Game extends JFrame{
 		System.exit(0);
 	}
 
+	
 	/**
 	 * A method invoked when the plane successfully fly pass 20 rocks
 	 */

@@ -1,6 +1,8 @@
 package game;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 import server.Client;
 
-public class GameScene extends PApplet{
+public class GameScene extends PApplet /*implements KeyListener*/{
 	
 	public static final int MARGIN_TOP = 50;
 	public static final int NUM_OF_STARS = 10;
@@ -33,12 +35,13 @@ public class GameScene extends PApplet{
 	private int time=0;
 	private int levelUpAnimationTime=0;
 	private int messageShowTime=0;
-	private PImage backgroundImg,starImg,tunnelBackgroundImg;
-	public PImage[] characters,cloudImg;
+	private PImage backgroundImg,starImg,tunnelBackgroundImg,moneyIcon;
+	public PImage[] characters,cloudImg,coinImg;
 	private Tunnel[] tunnels;
 	private Character character;
 	private List<Stars> stars;
 	private List<Cloud> clouds;
+	private List<Coin> coins;
 	boolean[] keys = new boolean[255];
 	private Game parentFrame;
 	private Model model;
@@ -46,8 +49,12 @@ public class GameScene extends PApplet{
 	private PVector characterVector;
 	private PVector starVector;
 	private TopBarDelegate topBarDelegate;
+	private ScoreBarDelegate scoreBarDelegate;
 	public int score=0;
-	public int earnCoin=0;
+	private int currentCoin=0;
+	private int nowScore;
+	private int earnCoin=0;
+	private int targetScore=5;
 	private Client client;
 	private int hitNumber,t;
 	/**
@@ -63,12 +70,19 @@ public class GameScene extends PApplet{
 		this.characters=parentFrame.getCharacterImages();
 		this.model=model;
 		this.client=client;
+		this.currentCoin=this.client.coin;
 		this.starImg = loadImage(this.getClass().getResource("/res/starGold.png").getPath());
+		this.moneyIcon = loadImage(this.getClass().getResource("/res/Shop/money_icon.png").getPath());
 		this.cloudImg=new PImage[2];
 		this.cloudImg[0] = loadImage(this.getClass().getResource("/res/Background/cloud_1.png").getPath());
 		this.cloudImg[1] = loadImage(this.getClass().getResource("/res/Background/cloud_2.png").getPath());
+		this.coinImg = new PImage[4];
+		this.coinImg[0] = loadImage(this.getClass().getResource("/res/Coin/coins_1.png").getPath());
+		this.coinImg[1] = loadImage(this.getClass().getResource("/res/Coin/coins_2.png").getPath());
+		this.coinImg[2] = loadImage(this.getClass().getResource("/res/Coin/coins_3.png").getPath());
+		this.coinImg[3] = loadImage(this.getClass().getResource("/res/Coin/coins_4.png").getPath());
 		this.requestFocus();
-		
+		this.addKeyListener(this);
 	}
 	
 	public void setup(){
@@ -87,27 +101,33 @@ public class GameScene extends PApplet{
 		for(int i=0;i<NUM_OF_STARS;i++)addStar();	
 		
 		this.clouds = new CopyOnWriteArrayList<Cloud>();
+		this.coins = new CopyOnWriteArrayList<Coin>();
 		makeClouds();
-		
+		makeCoins();
 		this.tunnels=new Tunnel[tunnelNum];
 
 		this.tunnels[0]=new Tunnel(this,this,"happy",0,-1);
 		this.tunnels[1]=new Tunnel(this,this,"normal",170,-1);
 		this.tunnels[2]=new Tunnel(this,this,"sad",340,-1);
-		
+		nowScore=0;
+		scoreBarDelegate.setFullScore(targetScore);
 	}
 	
 	//called by Game to  topBarDelegate to topBar of the game
 	public void setTopBarDelegate(TopBarDelegate d){
 		this.topBarDelegate=d;
 	}
+	public void setScoreBarDelegate(ScoreBarDelegate d){
+		this.scoreBarDelegate=d;
+	}
 	public void draw(){
 		background(255, 255, 255);
+
 		if(!tunnelMode){
-				
+			
 				if(time++==500){
 					time=0;
-					if(score<(level*level)*2){
+					if(nowScore<targetScore){
 						try {
 							parentFrame.gameOver();
 						} catch (JSONException e) {
@@ -120,7 +140,10 @@ public class GameScene extends PApplet{
 				}
 				
 				image(this.backgroundImg, 0, 50, 500, 700);
-				
+				image(this.moneyIcon, 10, 600, 50, 50);
+				textSize(20);
+				fill(0, 0, 0);
+				text("Money:"+currentCoin, 60, 635);
 				if(keys[LEFT]){
 					this.character.setMovement(Character.LEFT);this.character.display();
 				}
@@ -141,6 +164,7 @@ public class GameScene extends PApplet{
 				
 				topBarDelegate.setScore(this.score);
 				topBarDelegate.setLevel(this.level);
+				scoreBarDelegate.setCurrentScore(this.nowScore);
 				if(this.score<(this.client.highScore))
 					topBarDelegate.setHighestScore(this.client.highScore);
 				else
@@ -156,6 +180,7 @@ public class GameScene extends PApplet{
 				
 				if(isHitStars()){
 					this.score++;
+					this.nowScore++;
 				}
 				
 		}else{	//tunnel Mode
@@ -179,8 +204,19 @@ public class GameScene extends PApplet{
 					}
 				}
 				image(this.tunnelBackgroundImg, 0, t++/5+700-this.tunnelBackgroundImg.height, this.tunnelBackgroundImg.width, this.tunnelBackgroundImg.height);
+				image(this.moneyIcon, 10, 600, 50, 50);
+				textSize(20);
+				fill(0, 0, 0);
+				text("Money:"+currentCoin, 60, 635);
 				for(Cloud cloud : this.clouds)
-					for(int i=0;i<level;i++)cloud.display();
+					cloud.display();
+				for(Coin coin : this.coins){
+					coin.display();
+					if(coin.getY()>600){
+						this.coins.remove(coin);
+						currentCoin++;
+					}
+				}
 				this.character.levelUpAnimation();
 			}
 			else{
@@ -203,6 +239,7 @@ public class GameScene extends PApplet{
 				}
 				else this.character.setMovement(Character.STAY);
 				this.character.tunnelModeDisplay();
+
 			}
 		}
 		
@@ -249,6 +286,11 @@ public class GameScene extends PApplet{
 		}
 		
 	}
+	private void makeCoins(){
+		for(int i=1;i<=level;i++){
+			this.coins.add(new Coin(this,this.coinImg,500,-i*15));
+		}
+	}
 	private boolean isHitTunnel(){
 		float Y = this.character.getY();
 		float X = this.character.getX();
@@ -287,12 +329,24 @@ public class GameScene extends PApplet{
 			tunnel.display();
 	}
 	public void nextLevel() throws JSONException{
+		
+		if(this.score>this.client.highScore){
+			this.client.highScore=this.score;
+			this.client.sendNewScore();
+		}
 		earnCoin+=level;
+		this.client.coin+=this.earnCoin;
+		this.client.sendNewCoin();
 		level++;
+		nowScore=0;
 		tunnelMode=false;
 		tunnelModeStart=true;
 		tunnelModeEnd=false;
+		this.nowScore=0;
+		scoreBarDelegate.setFullScore(targetScore);
 		this.clouds.removeAll(clouds);
+		this.coins.removeAll(coins);
+		makeCoins();
 		makeClouds();
 		this.stars.removeAll(stars);
 		for(int i=0;i<NUM_OF_STARS;i++)addStar();
@@ -352,6 +406,7 @@ public class GameScene extends PApplet{
 			this.tunnels[0].tunnelColorRecover();
 		}
 	}
+	
 	@SuppressWarnings("deprecation")
 	public void exit(){
 		this.music.musicStop();

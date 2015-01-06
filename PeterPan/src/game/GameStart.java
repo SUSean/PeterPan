@@ -46,7 +46,7 @@ public class GameStart extends PApplet{
 		}
 		
 		//set username text and money text
-		fill(0, 255, 0);
+		fill(255, 0, 0);
 		textSize(40);
 		text(this.client.name, 40, 40);
 		textSize(30);
