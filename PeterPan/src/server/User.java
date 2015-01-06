@@ -70,6 +70,7 @@ public class User {
 		}
 		
 		csvWriter.writeAll(data);
+		csvWriter.close();
 		writer.close();
 	}
 	public void addSong(String feel, int num) throws IOException {
@@ -77,8 +78,9 @@ public class User {
 			ArrayList<String> temp= new ArrayList<String>();
 			lists.put(feel,temp);
 		}
-		if(!lists.get(feel).contains("music_"+num))
+		if(!lists.get(feel).contains("music_"+num)){
 			lists.get(feel).add("music_"+num);
+		}
 		writeList();
 	}
 }
