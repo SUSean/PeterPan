@@ -12,7 +12,7 @@ public class ScoreBar extends JPanel {
 	private int currentScore;
 	
 	public ScoreBar(int fullScore, int currentScore){
-		this.setBounds(0,50,500,30);
+		this.setBounds(0,50,500,15);
 		this.setBackground(Color.black);
 		this.setOpaque(true);
 		this.setLayout(null);
