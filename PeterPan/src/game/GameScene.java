@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javazoom.jl.decoder.JavaLayerException;
+
 import org.json.JSONException;
 
 import model.Model;
@@ -28,9 +30,11 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	public static final int NUM_OF_CLOUDS = 30;
 	public static final int tunnelNum = 3;
 	public static final int keypressedTime = 10;
+	public static final int endLevel = 10;
 	public boolean tunnelMode=false;
 	public boolean tunnelModeStart=true;
 	public boolean tunnelModeEnd=false;
+	public boolean pauseMode=false;
 	private boolean keyLock=false;
 	private int level=1;
 	private int chosenCharacter;
@@ -56,7 +60,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	private int currentCoin=0;
 	private int nowScore;
 	private int earnCoin=0;
-	private int targetScore=5;
+	private int targetScore=1;
 	private Client client;
 	private int hitNumber,t;
 	private Random random = new Random();
@@ -122,12 +126,19 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	public void setScoreBarDelegate(ScoreBarDelegate d){
 		this.scoreBarDelegate=d;
 	}
+	@SuppressWarnings("deprecation")
 	public void draw(){
 		background(255, 255, 255);
-
+		
 		if(!tunnelMode){
-			
-				if(time++==500){
+				if(pauseMode){
+					tint(100);
+				}
+				else{
+					tint(255);
+					time++;
+				}
+				if(time==300){
 					time=0;
 					if(nowScore<targetScore){
 						try {
@@ -138,9 +149,8 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 						}
 					}else{
 						tunnelMode=true;
-						keyLock=false;
 						this.tunnels=new Tunnel[tunnelNum];
-						System.out.println(a);
+						int a =random.nextInt(100)%3;
 						this.tunnels[0]=new Tunnel(this,this,feels.get(a)[0],0,-1);
 						this.tunnels[1]=new Tunnel(this,this,feels.get(a)[1],170,-1);
 						this.tunnels[2]=new Tunnel(this,this,feels.get(a)[2],340,-1);
@@ -152,22 +162,50 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 				textSize(20);
 				fill(0, 0, 0);
 				text("Money:"+currentCoin, 60, 635);
-				if(keys[LEFT]){
-					this.character.setMovement(Character.LEFT);this.character.display();
-				}
-				if(keys[RIGHT]){
-					this.character.setMovement(character.RIGHT);this.character.display();
-				}
-				if(keys[UP]){
-					this.character.setMovement(Character.UP);this.character.display();
-				}		
-				if(keys[DOWN]){
-					this.character.setMovement(Character.DOWN);this.character.display();
-				}
 				
-				if(!keys[LEFT]&&!keys[RIGHT]&&!keys[UP]&&!keys[DOWN])this.character.setMovement(Character.STAY);
 				
+				if(!pauseMode){
+					if(keys[LEFT]){
+						this.character.setMovement(Character.LEFT);this.character.display();
+					}
+					if(keys[RIGHT]){
+						this.character.setMovement(character.RIGHT);this.character.display();
+					}
+					if(keys[UP]){
+						this.character.setMovement(Character.UP);this.character.display();
+					}		
+					if(keys[DOWN]){
+						this.character.setMovement(Character.DOWN);this.character.display();
+					}
+					if(!keys[LEFT]&&!keys[RIGHT]&&!keys[UP]&&!keys[DOWN])this.character.setMovement(Character.STAY);
+					for(Stars stars : this.stars){
+						for(int i=0;i<level;i++)stars.display(true);
+					}
+				}
+				for(Stars stars : this.stars){
+					for(int i=0;i<level;i++)stars.display(false);
+				}
 				this.character.display();
+				if(pauseMode){
+					fill(255, 255, 255);
+					textSize(40);
+					text("~PAUSE~", 170, 350);
+				}
+				if(!keyLock&&keyPressed&&key==' '){
+					pauseMode=!pauseMode;
+					keyLock=true;
+					if(pauseMode){
+						System.out.println("stop");
+						this.music.musicStop();
+					}
+						
+					else{
+						System.out.println("start");
+						this.music.musicRestart();
+					}
+				}
+				
+				
 				//Refresh top bar message
 				
 				topBarDelegate.setScore(this.score);
@@ -177,9 +215,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 					topBarDelegate.setHighestScore(this.client.highScore);
 				else
 					topBarDelegate.setHighestScore(this.score);
-				for(Stars stars : this.stars){
-					for(int i=0;i<level;i++)stars.display();
-				}
+				
 					
 					
 				if(this.stars.size()==0){
@@ -198,6 +234,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 				if(++messageShowTime==100){
 					messageShowTime=0;
 					tunnelModeStart=false;
+					keyLock=false;
 					this.character.setMovement(Character.STAY);
 				}
 			}
@@ -240,10 +277,11 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 					else if(keyPressed&&keyCode==RIGHT){
 						keyLock=true;
 						this.character.setMovement(Character.RIGHT);
+						
 					}
 					else if(keyPressed&&keyCode==UP){
 						this.character.setMovement(Character.UP);
-					}		
+					}
 				}
 				else this.character.setMovement(Character.STAY);
 				this.character.tunnelModeDisplay();
@@ -358,12 +396,12 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 		makeClouds();
 		this.stars.removeAll(stars);
 		for(int i=0;i<NUM_OF_STARS;i++)addStar();
-		this.music.musicStop();
+		this.music.musicClose();
 		this.client.sendSong(this.tunnels[hitNumber].string,this.music.musicName);
 		this.music.musicRestart();
 		System.out.println("next");
 		newBackground();
-		if(level==11){
+		if(level==endLevel+1){
 			try {
 				this.parentFrame.winFlag=true;
 				parentFrame.gameOver();
@@ -417,7 +455,7 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 	
 	@SuppressWarnings("deprecation")
 	public void exit(){
-		this.music.musicStop();
+		this.music.musicClose();
 		this.music.stop();
 	}
 }

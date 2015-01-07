@@ -21,8 +21,9 @@ public class Stars {
 		
 	}
 	
-	public void display(){
-		this.y += 2;
+	public void display(boolean move){
+		if(move)
+			this.y += 2;
 		this.parent.image(this.image, this.x, this.y, this.w, this.h);
 	}
 	

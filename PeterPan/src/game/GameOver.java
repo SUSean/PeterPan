@@ -89,9 +89,9 @@ public class GameOver extends PApplet{
 		//select play again or exit
 		if (rightButton){
 			tint(120);
-			image(this.playAgain, width/9*2, 600, 80, 80);
+			image(this.playAgain, width/9*2, 585, 80, 80);
 			tint(255);
-			image(this.exit, width/10*6, 595, 90, 90);
+			image(this.exit, width/10*6, 580, 90, 90);
 			tint(225);
 			if(keyPressed&&key==ENTER){
 				try {
@@ -104,9 +104,9 @@ public class GameOver extends PApplet{
 		}
 		else{
 			tint(255);
-			image(this.playAgain, width/9*2, 600, 80, 80);
+			image(this.playAgain, width/9*2, 590, 80, 80);
 			tint(120);
-			image(this.exit, width/10*6, 595, 90, 90);
+			image(this.exit, width/10*6, 585, 90, 90);
 			tint(225);
 			if(keyPressed&&key==ENTER){
 				game.restart();
