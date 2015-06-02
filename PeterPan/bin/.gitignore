@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-/server/
-/game/
-=======
-/game/
 /res/
->>>>>>> 54b991c0373e1db7d64d5983bac2a29a0a74b387
+/game/
 /model/
+/server/
