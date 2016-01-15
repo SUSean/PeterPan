@@ -150,7 +150,11 @@ public class GameScene extends PApplet /*implements KeyListener*/{
 					}else{
 						tunnelMode=true;
 						this.tunnels=new Tunnel[tunnelNum];
+<<<<<<< HEAD:client/src/game/GameScene.java
 						int a =random.nextInt(100)%3;
+=======
+						int a = random.nextInt(100)%3;
+>>>>>>> origin/master:PeterPan/src/game/GameScene.java
 						this.tunnels[0]=new Tunnel(this,this,feels.get(a)[0],0,-1);
 						this.tunnels[1]=new Tunnel(this,this,feels.get(a)[1],170,-1);
 						this.tunnels[2]=new Tunnel(this,this,feels.get(a)[2],340,-1);
